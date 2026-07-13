@@ -77,7 +77,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full px-6 transform-gpu will-change-transform transition-[padding] duration-300 ease-out ${
+      className={`sticky top-0 z-50 w-full px-6 transition-[padding] duration-300 ease-out ${
         isScrolled ? "py-0" : "py-4"
       }`}
     >

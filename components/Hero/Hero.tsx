@@ -19,7 +19,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative mx-auto grid max-w-6xl scroll-mt-32 items-center gap-12 overflow-hidden px-6 py-20 md:grid-cols-2 md:py-28"
+      className="relative mx-auto grid max-w-6xl scroll-mt-32 items-center gap-12 overflow-hidden px-6 pt-6 pb-20 md:grid-cols-2 md:py-28"
     >
       <motion.div
         aria-hidden
@@ -93,7 +93,7 @@ export default function Hero() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="order-1 md:order-2"
+        className="order-1 -mx-4 md:order-2 md:mx-0"
       >
         <div className="aspect-4/5 w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
           {/* Platzhalter: /public/hero-photo.jpg, Kunde liefert Portraitfoto */}
