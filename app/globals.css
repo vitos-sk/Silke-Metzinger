@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #faf7f2;
+  --color-sage: #8faf8a;
+  --color-gold: #c8a96a;
+  --color-text-primary: #2c2c2c;
+  --color-text-secondary: #6b6b6b;
+
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-inter), sans-serif;
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-text-primary);
+}
