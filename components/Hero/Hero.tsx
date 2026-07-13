@@ -19,7 +19,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative mx-auto grid max-w-6xl scroll-mt-32 items-center gap-12 overflow-hidden px-6 pt-6 pb-20 md:grid-cols-2 md:py-28"
+      className="relative mx-auto grid max-w-6xl scroll-mt-32 items-center gap-x-12 gap-y-8 overflow-hidden px-6 pt-6 pb-20 md:grid-cols-2 md:gap-y-0 md:py-28"
     >
       <motion.div
         aria-hidden
@@ -32,14 +32,34 @@ export default function Hero() {
         className="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 animate-float-slower rounded-full bg-gold/20 blur-3xl"
       />
 
-      <RevealGroup className="order-2 md:order-1" stagger={0.15}>
+      <RevealItem className="order-1 md:order-1 md:col-start-1 md:row-start-1">
+        <h1 className="font-serif text-4xl leading-tight text-text-primary md:text-5xl">
+          Vital &amp; Frei – lebe dein bestes Leben
+        </h1>
+      </RevealItem>
+
+      <motion.div
+        style={{ y: photoY }}
+        initial={{ opacity: 0, scale: 0.94 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="order-2 -mx-4 md:order-2 md:col-start-2 md:row-start-1 md:row-span-2 md:mx-0"
+      >
+        <div className="aspect-square w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
+          {/* Platzhalter: /public/hero-photo.jpg, Kunde liefert Portraitfoto */}
+          <div className="flex h-full w-full items-center justify-center text-sm text-text-secondary">
+            Foto folgt
+          </div>
+        </div>
+      </motion.div>
+
+      <RevealGroup
+        className="order-3 md:order-3 md:col-start-1 md:row-start-2"
+        stagger={0.15}
+      >
         <RevealItem>
-          <h1 className="font-serif text-4xl leading-tight text-text-primary md:text-5xl">
-            Vital &amp; Frei – lebe dein bestes Leben
-          </h1>
-        </RevealItem>
-        <RevealItem>
-          <p className="mt-6 text-lg text-text-secondary">
+          <p className="text-lg text-text-secondary md:mt-6">
             Du spürst, dass mehr möglich ist. Mehr Energie. Mehr Leichtigkeit.
             Mehr Klarheit darüber, was du wirklich willst – und wie du deinen
             eigenen Weg dorthin findest.
@@ -86,22 +106,6 @@ export default function Hero() {
           </p>
         </RevealItem>
       </RevealGroup>
-
-      <motion.div
-        style={{ y: photoY }}
-        initial={{ opacity: 0, scale: 0.94 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="order-1 -mx-4 md:order-2 md:mx-0"
-      >
-        <div className="aspect-4/5 w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
-          {/* Platzhalter: /public/hero-photo.jpg, Kunde liefert Portraitfoto */}
-          <div className="flex h-full w-full items-center justify-center text-sm text-text-secondary">
-            Foto folgt
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 }
