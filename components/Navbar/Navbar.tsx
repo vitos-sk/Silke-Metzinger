@@ -77,12 +77,12 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full px-6 transition-[padding] duration-300 ease-out ${
+      className={`sticky top-0 z-50 w-full px-6 transform-gpu will-change-transform transition-[padding] duration-300 ease-out ${
         isScrolled ? "py-0" : "py-4"
       }`}
     >
       <div
-        className={`relative mx-auto max-w-6xl overflow-hidden bg-ivory/60 shadow-xl shadow-text-primary/20 backdrop-blur-xl transition-[border-radius] duration-300 ease-out ${
+        className={`relative mx-auto max-w-6xl transform-gpu overflow-hidden bg-ivory/60 shadow-xl shadow-text-primary/20 backdrop-blur-xl transition-[border-radius] duration-300 ease-out ${
           isScrolled ? "rounded-b-3xl" : "rounded-3xl"
         }`}
       >

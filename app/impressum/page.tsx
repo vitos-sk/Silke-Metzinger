@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { CopyableNumber } from "@/components/ui/CopyableNumber";
 
 export const metadata: Metadata = {
   title: "Impressum – Silke Metzinger",
@@ -47,9 +48,11 @@ export default function ImpressumPage() {
           </p>
           <p>
             Telefon:{" "}
-            <a href="tel:+41766303682" className="hover:text-sage">
-              076 630 36 82
-            </a>
+            <CopyableNumber
+              value="076 630 36 82"
+              href="tel:+41766303682"
+              label="Telefonnummer Schweiz"
+            />
           </p>
         </section>
 
@@ -61,9 +64,11 @@ export default function ImpressumPage() {
           <p>79369 Wyhl</p>
           <p className="mt-2">
             Telefon:{" "}
-            <a href="tel:+491734301477" className="hover:text-sage">
-              0173 4301477
-            </a>
+            <CopyableNumber
+              value="0173 4301477"
+              href="tel:+491734301477"
+              label="Telefonnummer Deutschland"
+            />
           </p>
         </section>
       </div>

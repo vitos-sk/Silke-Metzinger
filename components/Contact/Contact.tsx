@@ -9,6 +9,7 @@ import {
   WhatsAppIcon,
 } from "@/components/icons/BrandIcons";
 import { Reveal } from "@/components/motion/Reveal";
+import { CopyableNumber } from "@/components/ui/CopyableNumber";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -36,7 +37,7 @@ function FloatingField({
   rows?: number;
 }) {
   const fieldClassName =
-    "peer w-full rounded-2xl border border-sage/25 bg-white py-3 pl-12 pr-4 text-text-primary outline-none transition-all duration-300 placeholder:text-transparent focus:border-sage focus:shadow-[0_0_0_4px_rgba(143,175,138,0.15)]";
+    "peer w-full rounded-2xl border border-sage/25 bg-white py-3 pl-12 pr-4 text-text-primary shadow-sm outline-none transition-all duration-300 placeholder:text-transparent focus:border-sage focus:shadow-[0_0_0_4px_rgba(143,175,138,0.15)]";
 
   const labelClassName =
     "pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 rounded bg-white px-1 text-text-secondary transition-all duration-300 peer-focus:top-0 peer-focus:left-4 peer-focus:-translate-y-1/2 peer-focus:scale-75 peer-focus:text-sage peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75";
@@ -115,8 +116,20 @@ export default function Contact() {
   }
 
   return (
-    <section id="kontakt" className="scroll-mt-32 bg-ivory px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section
+      id="kontakt"
+      className="relative overflow-hidden scroll-mt-32 bg-ivory px-4 py-20 sm:px-6"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-20 top-0 h-72 w-72 animate-float-slow rounded-full bg-sage/15 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 animate-float-slower rounded-full bg-gold/15 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
         <Reveal>
           <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
             Lass uns gemeinsam ins Gespräch kommen
@@ -131,8 +144,12 @@ export default function Contact() {
         <div className="mt-14 grid gap-12 md:grid-cols-2">
           <Reveal
             direction="left"
-            className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-sage/15 sm:p-8"
+            className="relative overflow-hidden rounded-3xl bg-ivory p-4 shadow-sm ring-1 ring-sage/20 sm:p-8"
           >
+          <span
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-sage via-gold to-sage"
+          />
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <FloatingField
@@ -165,7 +182,7 @@ export default function Contact() {
               icon={<MessageSquare className="h-5 w-5" />}
             />
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-sage/20 px-4 py-3 text-sm text-text-secondary transition-colors hover:border-sage/40">
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-sage/20 bg-white/70 px-4 py-3 text-sm text-text-secondary shadow-sm transition-colors hover:border-sage/40">
               <span className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
                 <input
                   type="checkbox"
@@ -181,10 +198,16 @@ export default function Contact() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="group flex w-full items-center justify-center gap-2 rounded-full bg-sage px-8 py-3.5 text-ivory shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(143,175,138,0.4)] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none sm:w-auto"
+              className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-8 py-3.5 text-ivory shadow-md ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-6px_rgba(143,175,138,0.4)] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none sm:w-auto"
             >
-              {status === "sending" ? "Wird gesendet …" : "Senden"}
-              <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <span
+                aria-hidden
+                className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              />
+              <span className="relative">
+                {status === "sending" ? "Wird gesendet …" : "Senden"}
+              </span>
+              <Send className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
 
             {status === "success" && (
@@ -221,12 +244,24 @@ export default function Contact() {
               </h3>
               <ul className="mt-4 space-y-3 text-text-secondary">
                 <li className="flex items-center gap-3">
-                  <WhatsAppIcon className="h-5 w-5 text-sage" />
-                  WhatsApp Deutschland: +49 173 340 1477
+                  <WhatsAppIcon className="h-5 w-5 shrink-0 text-sage" />
+                  <span>
+                    WhatsApp Deutschland:{" "}
+                    <CopyableNumber
+                      value="+49 173 340 1477"
+                      label="WhatsApp-Nummer Deutschland"
+                    />
+                  </span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <WhatsAppIcon className="h-5 w-5 text-sage" />
-                  WhatsApp Schweiz: +41 76 630 3682
+                  <WhatsAppIcon className="h-5 w-5 shrink-0 text-sage" />
+                  <span>
+                    WhatsApp Schweiz:{" "}
+                    <CopyableNumber
+                      value="+41 76 630 3682"
+                      label="WhatsApp-Nummer Schweiz"
+                    />
+                  </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-sage" />
