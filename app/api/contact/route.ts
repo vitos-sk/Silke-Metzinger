@@ -11,6 +11,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return NextResponse.json(
+      { error: "Bitte gib eine gültige E-Mail-Adresse ein." },
+      { status: 400 },
+    );
+  }
+
   // TODO: E-Mail-Versand über Resend an info@silke-metzinger.ch implementieren.
   // Benötigt RESEND_API_KEY in .env.local
 

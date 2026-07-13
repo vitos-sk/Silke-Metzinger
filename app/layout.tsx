@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Playfair_Display, Inter, Cormorant } from "next/font/google";
+import MotionProvider from "@/components/motion/MotionProvider";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -11,6 +12,14 @@ const playfair = Playfair_Display({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorant = Cormorant({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  style: ["italic"],
   display: "swap",
 });
 
@@ -37,10 +46,10 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${playfair.variable} ${inter.variable} h-full antialiased`}
+      className={`${playfair.variable} ${inter.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-ivory text-text-primary">
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );
