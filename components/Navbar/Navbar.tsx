@@ -12,38 +12,50 @@ const NAV_LINKS = [
   { href: "#kontakt", label: "Kontakt" },
 ];
 
-// Reihenfolge der Sections, wie sie tatsächlich im DOM erscheinen (siehe page.tsx).
-// Bewusst getrennt von NAV_LINKS, dessen Anzeige-Reihenfolge im Menü davon abweicht.
 const SECTION_ORDER = ["home", "ueber-mich", "leistungen", "news-events", "kontakt"];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const headerRef = useRef<HTMLElement>(null);
 
   const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
-    // Warten, bis die Menü-Einklapp-Animation (300ms) fertig ist,
-    // damit die Ziel-Position nach dem finalen Layout berechnet wird.
+
     window.setTimeout(() => {
       document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
     }, 300);
   };
 
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const headerEl = headerRef.current;
+    if (!headerEl) return;
+
+    const setNavbarHeight = () => {
+      document.documentElement.style.setProperty("--navbar-h", `${headerEl.offsetHeight}px`);
+    };
+
+    setNavbarHeight();
+    const resizeObserver = new ResizeObserver(setNavbarHeight);
+    resizeObserver.observe(headerEl);
+    return () => resizeObserver.disconnect();
+  }, [isScrolled, isMenuOpen]);
+
   const intersectingIds = useRef(new Set<string>());
 
   useEffect(() => {
-    const sections = SECTION_ORDER.map((id) =>
-      document.getElementById(id),
-    ).filter((section): section is HTMLElement => section !== null);
+    const sections = SECTION_ORDER.map((id) => document.getElementById(id)).filter(
+      (section): section is HTMLElement => section !== null,
+    );
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -77,18 +89,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full px-6 transition-[padding] duration-300 ease-out ${
-        isScrolled ? "py-0" : "py-4"
+      ref={headerRef}
+      className={`fixed inset-x-0 top-0 z-50 w-full transition-[padding] duration-300 ${
+        isScrolled ? "px-0 py-0" : "px-6 py-4"
       }`}
     >
-      <div
-        className={`relative mx-auto max-w-6xl transform-gpu overflow-hidden bg-ivory/60 shadow-xl shadow-text-primary/20 backdrop-blur-xl transition-[border-radius] duration-300 ease-out ${
-          isScrolled ? "rounded-b-3xl" : "rounded-3xl"
-        }`}
-      >
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-ivory/40 shadow-xl shadow-text-primary/20 backdrop-blur-xl">
         <ScrollProgress />
         <nav
-          className={`flex items-center justify-between px-6 transition-[padding] duration-300 ease-out md:px-8 ${
+          className={`flex items-center justify-between px-6 transition-[padding] duration-300 md:px-8 ${
             isScrolled ? "py-2" : "py-3"
           }`}
         >
@@ -99,7 +108,7 @@ export default function Navbar() {
               width={949}
               height={312}
               priority
-              className={`w-auto transition-[height] duration-300 ease-out ${
+              className={`w-auto transition-[height] duration-300 ${
                 isScrolled ? "h-9 md:h-11" : "h-11 md:h-14"
               }`}
             />

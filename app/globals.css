@@ -16,12 +16,16 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  --navbar-h: 100px;
+}
+
 body {
   background: var(--color-ivory);
   color: var(--color-text-primary);
 }
 
-section[id] {
+:where(section[id]) {
   scroll-margin-top: 110px;
 }
 

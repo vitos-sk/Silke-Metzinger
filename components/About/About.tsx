@@ -23,6 +23,29 @@ const CHAPTER_PHOTOS: Record<ChapterId, { from: string; to: string; label: strin
   privat: { from: "from-sky-300/70", to: "to-sky-100/30", label: "Foto folgt — Privat" },
 };
 
+function ChapterPhoto({
+  activeChapter,
+  className,
+}: {
+  activeChapter: ChapterId;
+  className?: string;
+}) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activeChapter}
+        initial={{ opacity: 0, scale: 1.03 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-sm text-text-secondary ${CHAPTER_PHOTOS[activeChapter].from} ${CHAPTER_PHOTOS[activeChapter].to} ${className ?? ""}`}
+      >
+        {CHAPTER_PHOTOS[activeChapter].label}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function Chapter({
   id,
   active,
@@ -75,50 +98,14 @@ export default function About() {
       </Reveal>
 
       <div className="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-start md:gap-12">
-        <div className="md:sticky md:top-32 md:self-start">
-          <Reveal direction="right">
-            <div className="relative aspect-4/3 w-full overflow-hidden rounded-3xl md:aspect-4/5">
-              {/* Platzhalter: pro Kapitel ein Foto vom Kunden (z. B. /public/about-<kapitel>.jpg).
-                  Die Farbflächen hier zeigen nur, dass das Bild synchron zum Scroll-Fortschritt wechselt. */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeChapter}
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-sm text-text-secondary ${CHAPTER_PHOTOS[activeChapter].from} ${CHAPTER_PHOTOS[activeChapter].to}`}
-                >
-                  {CHAPTER_PHOTOS[activeChapter].label}
-                </motion.div>
-              </AnimatePresence>
-              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-black/0 to-transparent" />
-              <div className="absolute inset-x-5 bottom-5 hidden md:block">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={activeChapter}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium ring-1 ring-white/25 backdrop-blur-sm ${
-                      activeChapter === "wendepunkt"
-                        ? "bg-gold text-ivory"
-                        : "bg-black/50 text-ivory"
-                    }`}
-                  >
-                    {activeTag}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <div>
-          {/* Mobiler Fortschritts-Tracker: ersetzt den Foto-Badge-Effekt,
-              der auf einer einspaltigen Ansicht ohne Sticky-Foto verlorenginge. */}
-          <div className="sticky top-20 z-10 -mx-6 mb-6 flex items-center justify-between gap-3 bg-ivory/95 px-6 py-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
+        {/* Mobil: kleines, immer sichtbares Sticky-Foto direkt unter der Navbar,
+            das beim Scrollen synchron mit dem Kapitel wechselt. */}
+        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 bg-ivory/95 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
+          <div className="relative aspect-2/1 w-full overflow-hidden">
+            <ChapterPhoto activeChapter={activeChapter} />
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-black/0 to-transparent" />
+          </div>
+          <div className="mt-3 flex items-center justify-between gap-3 px-6">
             <AnimatePresence mode="wait">
               <motion.span
                 key={activeChapter}
@@ -144,7 +131,39 @@ export default function About() {
               ))}
             </div>
           </div>
+        </div>
 
+        {/* Desktop: großes Sticky-Foto in eigener Spalte. */}
+        <div className="hidden md:sticky md:top-32 md:block md:self-start">
+          <Reveal direction="right">
+            <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl">
+              {/* Platzhalter: pro Kapitel ein Foto vom Kunden (z. B. /public/about-<kapitel>.jpg).
+                  Die Farbflächen hier zeigen nur, dass das Bild synchron zum Scroll-Fortschritt wechselt. */}
+              <ChapterPhoto activeChapter={activeChapter} />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-black/0 to-transparent" />
+              <div className="absolute inset-x-5 bottom-5">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={activeChapter}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium ring-1 ring-white/25 backdrop-blur-sm ${
+                      activeChapter === "wendepunkt"
+                        ? "bg-gold text-ivory"
+                        : "bg-black/50 text-ivory"
+                    }`}
+                  >
+                    {activeTag}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <div>
           <div className="flex flex-col gap-12 border-l border-sage/20 pl-6 md:gap-16 md:pl-8">
           <Chapter id="vorher" active={activeChapter === "vorher"} onActive={setActiveChapter}>
             <RevealItem>

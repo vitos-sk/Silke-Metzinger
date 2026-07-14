@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="pt-(--navbar-h)">
         <Hero />
         <Pillars />
         <About />
