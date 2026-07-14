@@ -90,15 +90,15 @@ export default function Navbar() {
   return (
     <header
       ref={headerRef}
-      className={`fixed inset-x-0 top-0 z-50 w-full transition-[padding] duration-300 ${
-        isScrolled ? "px-0 py-0" : "px-6 py-4"
+      className={`fixed inset-x-0 top-0 z-50 w-full transform-gpu px-0 py-0 transition-[padding] duration-300 ${
+        isScrolled ? "md:px-0 md:py-0" : "md:px-6 md:py-4"
       }`}
     >
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-ivory/40 shadow-xl shadow-text-primary/20 backdrop-blur-xl">
+      <div className="relative mx-auto max-w-6xl transform-gpu overflow-hidden rounded-3xl bg-ivory shadow-xl shadow-text-primary/20 will-change-transform md:bg-ivory/40 md:backdrop-blur-xl">
         <ScrollProgress />
         <nav
-          className={`flex items-center justify-between px-6 transition-[padding] duration-300 md:px-8 ${
-            isScrolled ? "py-2" : "py-3"
+          className={`flex items-center justify-between px-6 py-2 transition-[padding] duration-300 md:px-8 ${
+            isScrolled ? "md:py-2" : "md:py-3"
           }`}
         >
           <a href="#home" className="flex items-center">
@@ -108,8 +108,8 @@ export default function Navbar() {
               width={949}
               height={312}
               priority
-              className={`w-auto transition-[height] duration-300 ${
-                isScrolled ? "h-9 md:h-11" : "h-11 md:h-14"
+              className={`h-9 w-auto transition-[height] duration-300 ${
+                isScrolled ? "md:h-11" : "md:h-14"
               }`}
             />
           </a>

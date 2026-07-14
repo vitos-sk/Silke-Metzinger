@@ -86,18 +86,19 @@ export default function Hero() {
           <motion.a
             href="#kontakt"
             whileTap={{ scale: 0.97 }}
-            className="group relative mt-8 inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-sage px-8 py-3.5 font-medium text-ivory shadow-[0_8px_24px_-6px_rgba(143,175,138,0.55)] ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(143,175,138,0.65)]"
+            className="group relative mt-8 inline-flex items-center gap-2 overflow-hidden rounded-full bg-sage px-6 py-3 text-sm font-medium whitespace-nowrap text-ivory shadow-[0_8px_24px_-6px_rgba(143,175,138,0.55)] ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(143,175,138,0.65)] sm:gap-2.5 sm:px-8 sm:py-3.5 sm:text-base"
           >
             <span
               aria-hidden
               className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
             />
-            <span className="relative">
+            <span className="relative sm:hidden">Jetzt Kontakt aufnehmen</span>
+            <span className="relative hidden sm:inline">
               Lass uns gemeinsam den ersten Schritt gehen
             </span>
             <ArrowRight
               aria-hidden
-              className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+              className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5"
               strokeWidth={2.25}
             />
           </motion.a>

@@ -243,20 +243,20 @@ export default function Contact() {
                 Direktkontakt
               </h3>
               <ul className="mt-4 space-y-3 text-text-secondary">
-                <li className="flex items-center gap-3">
-                  <WhatsAppIcon className="h-5 w-5 shrink-0 text-sage" />
-                  <span>
-                    WhatsApp Deutschland:{" "}
+                <li className="flex items-start gap-3 sm:items-center">
+                  <WhatsAppIcon className="mt-0.5 h-5 w-5 shrink-0 text-sage sm:mt-0" />
+                  <span className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
+                    <span>WhatsApp Deutschland:</span>
                     <CopyableNumber
                       value="+49 173 340 1477"
                       label="WhatsApp-Nummer Deutschland"
                     />
                   </span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <WhatsAppIcon className="h-5 w-5 shrink-0 text-sage" />
-                  <span>
-                    WhatsApp Schweiz:{" "}
+                <li className="flex items-start gap-3 sm:items-center">
+                  <WhatsAppIcon className="mt-0.5 h-5 w-5 shrink-0 text-sage sm:mt-0" />
+                  <span className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
+                    <span>WhatsApp Schweiz:</span>
                     <CopyableNumber
                       value="+41 76 630 3682"
                       label="WhatsApp-Nummer Schweiz"
