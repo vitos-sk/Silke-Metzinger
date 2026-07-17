@@ -8,8 +8,8 @@ import {
   LinkedInIcon,
   WhatsAppIcon,
 } from "@/components/icons/BrandIcons";
-import { Reveal } from "@/components/motion/Reveal";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
+import { Reveal } from "@/components/motion/Reveal";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -39,11 +39,11 @@ function FloatingField({
   const fieldClassName =
     "peer w-full rounded-2xl border border-sage/25 bg-white py-3 pl-12 pr-4 text-text-primary shadow-sm outline-none transition-all duration-300 placeholder:text-transparent focus:border-sage focus:shadow-[0_0_0_4px_rgba(143,175,138,0.15)]";
 
-  const labelClassName =
-    "pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 rounded bg-white px-1 text-text-secondary transition-all duration-300 peer-focus:top-0 peer-focus:left-4 peer-focus:-translate-y-1/2 peer-focus:scale-75 peer-focus:text-sage peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75";
-
   const iconClassName =
     "pointer-events-none absolute left-4 top-4 text-text-secondary/50 transition-colors duration-300 peer-focus:text-sage";
+
+  const labelClassName =
+    "pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 rounded bg-white px-1 text-text-secondary transition-all duration-300 peer-focus:top-0 peer-focus:left-4 peer-focus:-translate-y-1/2 peer-focus:scale-75 peer-focus:text-sage peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75";
 
   return (
     <div className="group relative">
@@ -135,9 +135,9 @@ export default function Contact() {
             Lass uns gemeinsam ins Gespräch kommen
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-center text-text-secondary">
-            Du möchtest mehr über meine Begleitung, Gesundheit, Vitalstoffe
-            oder deinen persönlichen Weg zu mehr Energie und Balance
-            erfahren? Ich freue mich darauf, von dir zu hören.
+            Du möchtest mehr über meine Begleitung, Gesundheit, Vitalstoffe oder deinen
+            persönlichen Weg zu mehr Energie und Balance erfahren? Ich freue mich darauf,
+            von dir zu hören.
           </p>
         </Reveal>
 
@@ -146,79 +146,79 @@ export default function Contact() {
             direction="left"
             className="relative overflow-hidden rounded-3xl bg-ivory p-4 shadow-sm ring-1 ring-sage/20 sm:p-8"
           >
-          <span
-            aria-hidden
-            className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-sage via-gold to-sage"
-          />
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FloatingField
-                id="firstName"
-                name="firstName"
-                label="Vorname"
-                icon={<User className="h-5 w-5" />}
-              />
-              <FloatingField
-                id="lastName"
-                name="lastName"
-                label="Nachname"
-                icon={<User className="h-5 w-5" />}
-              />
-            </div>
-
-            <FloatingField
-              id="email"
-              name="email"
-              type="email"
-              label="E-Mail-Adresse"
-              icon={<Mail className="h-5 w-5" />}
+            <span
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-sage via-gold to-sage"
             />
-
-            <FloatingField
-              id="message"
-              name="message"
-              label="Deine Nachricht"
-              as="textarea"
-              icon={<MessageSquare className="h-5 w-5" />}
-            />
-
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-sage/20 bg-white/70 px-4 py-3 text-sm text-text-secondary shadow-sm transition-colors hover:border-sage/40">
-              <span className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
-                <input
-                  type="checkbox"
-                  name="consent"
-                  required
-                  className="peer absolute inset-0 h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-sage/40 transition-colors checked:border-sage checked:bg-sage"
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FloatingField
+                  id="firstName"
+                  name="firstName"
+                  label="Vorname"
+                  icon={<User className="h-5 w-5" />}
                 />
-                <Check className="pointer-events-none h-3.5 w-3.5 text-ivory opacity-0 transition-opacity peer-checked:opacity-100" />
-              </span>
-              Ich stimme der Datenschutzerklärung zu.
-            </label>
+                <FloatingField
+                  id="lastName"
+                  name="lastName"
+                  label="Nachname"
+                  icon={<User className="h-5 w-5" />}
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-8 py-3.5 text-ivory shadow-md ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-6px_rgba(143,175,138,0.4)] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none sm:w-auto"
-            >
-              <span
-                aria-hidden
-                className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              <FloatingField
+                id="email"
+                name="email"
+                type="email"
+                label="E-Mail-Adresse"
+                icon={<Mail className="h-5 w-5" />}
               />
-              <span className="relative">
-                {status === "sending" ? "Wird gesendet …" : "Senden"}
-              </span>
-              <Send className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
 
-            {status === "success" && (
-              <p className="text-sm text-sage">
-                Danke für deine Nachricht! Ich melde mich bald bei dir.
-              </p>
-            )}
-            {status === "error" && (
-              <p className="text-sm text-red-600">{errorMessage}</p>
-            )}
-          </form>
+              <FloatingField
+                id="message"
+                name="message"
+                label="Deine Nachricht"
+                as="textarea"
+                icon={<MessageSquare className="h-5 w-5" />}
+              />
+
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-sage/20 bg-white/70 px-4 py-3 text-sm text-text-secondary shadow-sm transition-colors hover:border-sage/40">
+                <span className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
+                  <input
+                    type="checkbox"
+                    name="consent"
+                    required
+                    className="peer absolute inset-0 h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-sage/40 transition-colors checked:border-sage checked:bg-sage"
+                  />
+                  <Check className="pointer-events-none h-3.5 w-3.5 text-ivory opacity-0 transition-opacity peer-checked:opacity-100" />
+                </span>
+                Ich stimme der Datenschutzerklärung zu.
+              </label>
+
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-8 py-3.5 text-ivory shadow-md ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-6px_rgba(143,175,138,0.4)] disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none sm:w-auto"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+                />
+                <span className="relative">
+                  {status === "sending" ? "Wird gesendet …" : "Senden"}
+                </span>
+                <Send className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+
+              {status === "success" && (
+                <p className="text-sm text-sage">
+                  Danke für deine Nachricht! Ich melde mich bald bei dir.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-sm text-red-600">{errorMessage}</p>
+              )}
+            </form>
           </Reveal>
 
           <Reveal direction="right" className="space-y-8">
@@ -239,9 +239,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <h3 className="font-serif text-lg text-text-primary">
-                Direktkontakt
-              </h3>
+              <h3 className="font-serif text-lg text-text-primary">Direktkontakt</h3>
               <ul className="mt-4 space-y-3 text-text-secondary">
                 <li className="flex items-start gap-3 sm:items-center">
                   <WhatsAppIcon className="mt-0.5 h-5 w-5 shrink-0 text-sage sm:mt-0" />
@@ -276,9 +274,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <h3 className="font-serif text-lg text-text-primary">
-                Social Media
-              </h3>
+              <h3 className="font-serif text-lg text-text-primary">Social Media</h3>
               <ul className="mt-4 flex gap-3">
                 {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
                   <li key={label}>

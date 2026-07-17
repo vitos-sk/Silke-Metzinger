@@ -39,7 +39,7 @@ function useCopyToClipboard(resetDelay = 2000) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => setCopied(false), resetDelay);
     },
-    [resetDelay]
+    [resetDelay],
   );
 
   return { copied, copy };
@@ -87,7 +87,10 @@ export function CopyableNumber({
   if (href) {
     return (
       <span className={`inline-flex items-center gap-1.5 ${className}`}>
-        <a href={href} className="underline decoration-sage/30 underline-offset-2 transition-colors hover:text-sage hover:decoration-sage">
+        <a
+          href={href}
+          className="underline decoration-sage/30 underline-offset-2 transition-colors hover:text-sage hover:decoration-sage"
+        >
           {value}
         </a>
         <span className="group relative inline-flex">
