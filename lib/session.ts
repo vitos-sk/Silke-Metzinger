@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 
 export const SESSION_COOKIE_NAME = "admin_session";
-const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 7; // 7 Tage
+const SESSION_DURATION_SECONDS = 60 * 60 * 12; // 12 Stunden
 
 function getSecretKey(): Uint8Array {
   const secret = process.env.SESSION_SECRET;
