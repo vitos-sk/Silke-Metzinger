@@ -13,7 +13,9 @@ function setGateCookie(response: NextResponse, token: string) {
   response.cookies.set(GATE_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    // Lax statt Strict: Der Gate-Link wird oft aus anderen Apps (Messenger, Mail)
+    // geöffnet, die Strict-Cookies beim Redirect auf Mobilgeräten nicht zuverlässig speichern.
+    sameSite: "lax",
     path: "/",
     maxAge: GATE_MAX_AGE,
   });
