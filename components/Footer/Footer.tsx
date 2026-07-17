@@ -1,19 +1,15 @@
 import Image from "next/image";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedInIcon,
-} from "@/components/icons/BrandIcons";
+import { FacebookIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
+
+const LEGAL_LINKS = [
+  { href: "/impressum", label: "Impressum" },
+  { href: "/datenschutz", label: "Datenschutz" },
+];
 
 const SOCIAL_LINKS = [
   { label: "Facebook", href: "#", icon: FacebookIcon },
   { label: "Instagram", href: "#", icon: InstagramIcon },
   { label: "LinkedIn", href: "#", icon: LinkedInIcon },
-];
-
-const LEGAL_LINKS = [
-  { href: "/impressum", label: "Impressum" },
-  { href: "/datenschutz", label: "Datenschutz" },
 ];
 
 export default function Footer() {
@@ -35,8 +31,8 @@ export default function Footer() {
             className="h-11 w-auto"
           />
           <p className="max-w-sm text-sm">
-            Ernährungsberaterin &amp; Coach für Gesundheit, Vitalstoffe und
-            deinen persönlichen Weg zu mehr Energie und Balance.
+            Ernährungsberaterin &amp; Coach für Gesundheit, Vitalstoffe und deinen
+            persönlichen Weg zu mehr Energie und Balance.
           </p>
           <ul className="flex gap-3">
             {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
