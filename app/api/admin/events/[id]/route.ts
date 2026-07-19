@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { deleteEvent, updateEvent } from "@/lib/events";
 import type { NewsEventInput } from "@/types/event";
 
@@ -15,11 +16,13 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 
   await updateEvent(id, body);
+  revalidatePath("/");
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(_request: Request, { params }: RouteParams) {
   const { id } = await params;
   await deleteEvent(id);
+  revalidatePath("/");
   return NextResponse.json({ ok: true });
 }

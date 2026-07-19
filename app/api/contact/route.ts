@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // TODO: E-Mail-Versand über Resend an info@silke-metzinger.ch implementieren.
+  // TODO: E-Mail-Versand über Resend an info.silke-metzinger@gmx.ch implementieren.
   // Benötigt RESEND_API_KEY in .env.local
 
   return NextResponse.json({ success: true });

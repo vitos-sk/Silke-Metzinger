@@ -4,8 +4,13 @@ import type { NewsEvent, NewsEventInput } from "@/types/event";
 const COLLECTION = "events";
 
 export async function listEvents(): Promise<NewsEvent[]> {
-  const snapshot = await getDb().collection(COLLECTION).orderBy("order", "asc").get();
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as NewsEvent);
+  // Kein orderBy("order") in der Query: Firestore schliesst Dokumente ohne
+  // dieses Feld stillschweigend aus dem Ergebnis aus. Stattdessen alle laden
+  // und mit Fallback client-seitig sortieren, damit keine Events verschwinden.
+  const snapshot = await getDb().collection(COLLECTION).get();
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, order: 0, ...doc.data() }) as NewsEvent)
+    .sort((a, b) => a.order - b.order);
 }
 
 export async function getEvent(id: string): Promise<NewsEvent | null> {

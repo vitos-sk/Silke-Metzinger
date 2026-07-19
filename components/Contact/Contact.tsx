@@ -5,7 +5,6 @@ import { Check, Mail, MessageSquare, Send, User } from "lucide-react";
 import {
   FacebookIcon,
   InstagramIcon,
-  LinkedInIcon,
   WhatsAppIcon,
 } from "@/components/icons/BrandIcons";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
@@ -14,9 +13,16 @@ import { Reveal } from "@/components/motion/Reveal";
 type Status = "idle" | "sending" | "success" | "error";
 
 const SOCIAL_LINKS = [
-  { label: "Facebook", href: "#", icon: FacebookIcon },
-  { label: "Instagram", href: "#", icon: InstagramIcon },
-  { label: "LinkedIn", href: "#", icon: LinkedInIcon },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/19LsGR6kfm/?mibextid=wwXIfr",
+    icon: FacebookIcon,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
+    icon: InstagramIcon,
+  },
 ];
 
 function FloatingField({
@@ -281,6 +287,8 @@ export default function Contact() {
                     <a
                       href={href}
                       aria-label={label}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                       className="flex h-11 w-11 items-center justify-center rounded-full bg-sage/10 text-sage ring-1 ring-sage/20 transition-colors hover:bg-sage/20"
                     >
                       <Icon className="h-5 w-5" />

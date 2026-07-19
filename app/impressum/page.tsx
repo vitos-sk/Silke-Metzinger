@@ -40,10 +40,10 @@ export default function ImpressumPage() {
           <p className="mt-2">
             E-Mail:{" "}
             <a
-              href="mailto:info@silke-metzinger.ch"
+              href="mailto:info.silke-metzinger@gmx.ch"
               className="hover:text-sage"
             >
-              info@silke-metzinger.ch
+              info.silke-metzinger@gmx.ch
             </a>
           </p>
           <p>
@@ -69,6 +69,63 @@ export default function ImpressumPage() {
               href="tel:+491734301477"
               label="Telefonnummer Deutschland"
             />
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-serif text-lg text-text-primary">
+            Haftung für Inhalte
+          </h2>
+          <p className="mt-2">
+            Als Diensteanbieterin bin ich gemäss den allgemeinen Gesetzen für
+            eigene Inhalte auf diesen Seiten verantwortlich. Eine
+            Verpflichtung zur Überwachung übermittelter oder gespeicherter
+            fremder Informationen besteht nicht. Verpflichtungen zur
+            Entfernung oder Sperrung der Nutzung von Informationen nach den
+            allgemeinen Gesetzen bleiben hiervon unberührt. Eine
+            diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der
+            Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden
+            entsprechender Rechtsverletzungen werde ich diese Inhalte umgehend
+            entfernen.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-serif text-lg text-text-primary">
+            Haftung für Links
+          </h2>
+          <p className="mt-2">
+            Dieses Angebot enthält Links zu externen Webseiten Dritter, auf
+            deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für
+            diese fremden Inhalte auch keine Gewähr übernehmen. Für die
+            Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter
+            oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten
+            wurden zum Zeitpunkt der Verlinkung auf mögliche
+            Rechtsverstösse überprüft. Rechtswidrige Inhalte waren zum
+            Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente
+            inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete
+            Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei
+            Bekanntwerden von Rechtsverletzungen werde ich derartige Links
+            umgehend entfernen.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-serif text-lg text-text-primary">
+            Urheberrecht
+          </h2>
+          <p className="mt-2">
+            Die durch mich erstellten Inhalte und Werke auf diesen Seiten
+            unterliegen dem Urheberrecht. Vervielfältigung, Bearbeitung,
+            Verbreitung und jede Art der Verwertung ausserhalb der Grenzen
+            des Urheberrechtes bedürfen der schriftlichen Zustimmung. Downloads
+            und Kopien dieser Seite sind nur für den privaten, nicht
+            kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser
+            Seite nicht von mir erstellt wurden, werden die Urheberrechte
+            Dritter beachtet. Sollten Sie trotzdem auf eine
+            Urheberrechtsverletzung aufmerksam werden, bitte ich um einen
+            entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen
+            werde ich derartige Inhalte umgehend entfernen.
           </p>
         </section>
       </div>

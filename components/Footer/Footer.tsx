@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FacebookIcon, InstagramIcon, LinkedInIcon } from "@/components/icons/BrandIcons";
+import { FacebookIcon, InstagramIcon } from "@/components/icons/BrandIcons";
 
 const LEGAL_LINKS = [
   { href: "/impressum", label: "Impressum" },
@@ -7,9 +7,16 @@ const LEGAL_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { label: "Facebook", href: "#", icon: FacebookIcon },
-  { label: "Instagram", href: "#", icon: InstagramIcon },
-  { label: "LinkedIn", href: "#", icon: LinkedInIcon },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/19LsGR6kfm/?mibextid=wwXIfr",
+    icon: FacebookIcon,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
+    icon: InstagramIcon,
+  },
 ];
 
 export default function Footer() {
@@ -40,6 +47,8 @@ export default function Footer() {
                 <a
                   href={href}
                   aria-label={label}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-sage/10 text-sage ring-1 ring-sage/20 transition-colors hover:bg-sage/20"
                 >
                   <Icon className="h-4 w-4" />

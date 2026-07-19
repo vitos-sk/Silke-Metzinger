@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createEvent, listEvents } from "@/lib/events";
 import type { NewsEventInput } from "@/types/event";
 
@@ -15,5 +16,6 @@ export async function POST(request: Request) {
   }
 
   const id = await createEvent(body);
+  revalidatePath("/");
   return NextResponse.json({ id });
 }
