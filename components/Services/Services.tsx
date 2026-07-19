@@ -1,6 +1,6 @@
 "use client";
 
-import { Leaf, Sparkles } from "lucide-react";
+import { Leaf, Sparkles, ShoppingBag, ArrowRight } from "lucide-react";
 import { RevealGroup, RevealItem, Reveal } from "@/components/motion/Reveal";
 
 const BODY_ITEMS = [
@@ -63,6 +63,37 @@ export default function Services() {
             </RevealGroup>
           </div>
         </div>
+
+        <Reveal>
+          <div className="mt-16 rounded-3xl bg-white/60 p-8 text-center ring-1 ring-black/5 md:p-12">
+            <p className="mx-auto max-w-2xl text-text-secondary">
+              Ich empfehle nur Produkte, die ich selbst kenne und aus eigener
+              Erfahrung schätze. Hier geht&apos;s zu meinem Online-Shop:
+            </p>
+            <a
+              href="https://www.lifeplus.com/SHGL5B/S/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative mt-6 inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-gold px-8 py-3.5 text-base font-medium whitespace-nowrap text-ivory shadow-[0_8px_24px_-6px_rgba(200,169,106,0.55)] ring-1 ring-gold/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(200,169,106,0.65)]"
+            >
+              <span
+                aria-hidden
+                className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              />
+              <ShoppingBag
+                aria-hidden
+                className="relative h-5 w-5 shrink-0"
+                strokeWidth={2.25}
+              />
+              <span className="relative">LifePlus Online-Shop</span>
+              <ArrowRight
+                aria-hidden
+                className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+                strokeWidth={2.25}
+              />
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

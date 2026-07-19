@@ -47,7 +47,7 @@ export default function Hero() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="order-2 -mx-4 md:order-2 md:col-start-2 md:row-start-1 md:row-span-2 md:mx-0"
       >
-        <div className="aspect-square w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
+        <div className="aspect-580/783 w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
           <Image
             src="/foto1.jpg"
             alt="Silke Metzinger"
@@ -58,6 +58,9 @@ export default function Hero() {
             className="h-full w-full object-cover"
           />
         </div>
+        <p className="mt-5 text-center font-serif text-lg text-text-secondary italic md:text-xl">
+          „Ich plane in Optimismus und rechne mit Überraschungen“
+        </p>
       </motion.div>
 
       <RevealGroup

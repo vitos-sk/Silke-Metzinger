@@ -1,7 +1,18 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import {
+  AlertCircle,
+  ArrowUpDown,
+  Calendar,
+  ImagePlus,
+  Link2,
+  Loader2,
+  Text,
+  Type,
+  X,
+} from "lucide-react";
 import type { NewsEvent } from "@/types/event";
 
 interface EventFormProps {
@@ -36,11 +47,17 @@ function loadDraft(storageKey: string): Draft | null {
   }
 }
 
+const fieldClass =
+  "mt-1.5 w-full rounded-xl border border-black/10 bg-white px-3.5 py-3 text-base text-text-primary outline-none transition-colors focus:border-sage focus:ring-2 focus:ring-sage/20";
+
+const labelClass = "flex items-center gap-1.5 text-sm font-medium text-text-primary";
+
 export default function EventForm({ initialEvent }: EventFormProps) {
   const router = useRouter();
   const pathname = usePathname();
   const isEditing = Boolean(initialEvent);
   const storageKey = draftKey(isEditing, initialEvent?.id);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [draft] = useState(() => loadDraft(storageKey));
 
@@ -72,7 +89,15 @@ export default function EventForm({ initialEvent }: EventFormProps) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+    let res: Response;
+    try {
+      res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+    } catch {
+      setUploading(false);
+      setError("Foto-Upload fehlgeschlagen. Bitte prüfe deine Internetverbindung.");
+      return;
+    }
+
     setUploading(false);
 
     if (res.status === 401) {
@@ -102,14 +127,21 @@ export default function EventForm({ initialEvent }: EventFormProps) {
 
     const payload = { title, date, description, link: link || null, imageUrl, order: Number(order) };
 
-    const res = await fetch(
-      isEditing ? `/api/admin/events/${initialEvent!.id}` : "/api/admin/events",
-      {
-        method: isEditing ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      },
-    );
+    let res: Response;
+    try {
+      res = await fetch(
+        isEditing ? `/api/admin/events/${initialEvent!.id}` : "/api/admin/events",
+        {
+          method: isEditing ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
+    } catch {
+      setSaving(false);
+      setError("Speichern fehlgeschlagen. Bitte prüfe deine Internetverbindung.");
+      return;
+    }
 
     setSaving(false);
 
@@ -129,9 +161,13 @@ export default function EventForm({ initialEvent }: EventFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-5 rounded-2xl bg-white p-6 shadow-sm">
+    <form
+      onSubmit={handleSubmit}
+      className="mt-6 space-y-5 rounded-2xl bg-white/70 p-4 pb-24 shadow-sm ring-1 ring-black/5 backdrop-blur-xl sm:p-6 sm:pb-6"
+    >
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="title">
+        <label className={labelClass} htmlFor="title">
+          <Type className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Titel
         </label>
         <input
@@ -139,12 +175,13 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="mt-1.5 w-full rounded-lg border border-black/10 px-3 py-2 outline-none focus:border-sage"
+          className={fieldClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="date">
+        <label className={labelClass} htmlFor="date">
+          <Calendar className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Datum (z. B. 12. September 2026)
         </label>
         <input
@@ -152,12 +189,13 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
-          className="mt-1.5 w-full rounded-lg border border-black/10 px-3 py-2 outline-none focus:border-sage"
+          className={fieldClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="description">
+        <label className={labelClass} htmlFor="description">
+          <Text className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Kurzbeschreibung
         </label>
         <textarea
@@ -166,12 +204,13 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           required
-          className="mt-1.5 w-full rounded-lg border border-black/10 px-3 py-2 outline-none focus:border-sage"
+          className={`${fieldClass} resize-none`}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="link">
+        <label className={labelClass} htmlFor="link">
+          <Link2 className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Link (optional, z. B. zur Anmeldung)
         </label>
         <input
@@ -179,44 +218,100 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           value={link}
           onChange={(e) => setLink(e.target.value)}
           placeholder="#kontakt"
-          className="mt-1.5 w-full rounded-lg border border-black/10 px-3 py-2 outline-none focus:border-sage"
+          className={fieldClass}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="order">
+        <label className={labelClass} htmlFor="order">
+          <ArrowUpDown className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Reihenfolge (kleinere Zahl zuerst)
         </label>
         <input
           id="order"
           type="number"
+          inputMode="numeric"
           value={order}
           onChange={(e) => setOrder(Number(e.target.value))}
-          className="mt-1.5 w-32 rounded-lg border border-black/10 px-3 py-2 outline-none focus:border-sage"
+          className={`${fieldClass} w-24 text-center`}
         />
       </div>
 
       <div>
-        <label className="block text-sm text-text-primary" htmlFor="photo">
+        <span className={labelClass}>
+          <ImagePlus className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Foto (erforderlich)
-        </label>
-        <input id="photo" type="file" accept="image/*" onChange={handleFileChange} className="mt-1.5" />
-        {uploading && <p className="mt-1 text-sm text-text-secondary">Lädt hoch…</p>}
-        {imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={imageUrl} alt="" className="mt-3 h-32 w-auto rounded-lg object-cover" />
-        )}
+        </span>
+
+        <input
+          ref={fileInputRef}
+          id="photo"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        <div className="mt-1.5 flex items-center gap-4">
+          {imageUrl && (
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl ring-1 ring-black/10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={imageUrl} alt="" className="h-full w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => {
+                  setImageUrl(null);
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                aria-label="Foto entfernen"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80"
+              >
+                <X className="h-3 w-3" strokeWidth={2} />
+              </button>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 rounded-xl border border-dashed border-sage/40 bg-sage/5 px-4 py-3 text-sm text-sage transition-colors hover:bg-sage/10 disabled:opacity-50"
+          >
+            {uploading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.75} />
+                Lädt hoch…
+              </>
+            ) : (
+              <>
+                <ImagePlus className="h-4 w-4" strokeWidth={1.75} />
+                {imageUrl ? "Foto ersetzen" : "Foto auswählen"}
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="flex items-center gap-1.5 text-sm text-red-600">
+          <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+          {error}
+        </p>
+      )}
 
-      <button
-        type="submit"
-        disabled={saving || uploading}
-        className="rounded-full bg-sage px-5 py-2.5 text-sm text-ivory transition-opacity hover:opacity-90 disabled:opacity-50"
-      >
-        {saving ? "Speichert…" : "Speichern"}
-      </button>
+      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-black/5 bg-white/90 p-4 backdrop-blur-xl sm:static sm:border-0 sm:bg-transparent sm:p-0">
+        <div className="mx-auto max-w-3xl sm:mx-0">
+          <button
+            type="submit"
+            disabled={saving || uploading}
+            className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-5 py-3.5 text-base font-medium text-ivory shadow-[0_8px_24px_-6px_rgba(143,175,138,0.55)] ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(143,175,138,0.65)] active:translate-y-0 disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
+          >
+            <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
+            {saving && <Loader2 className="h-4.5 w-4.5 animate-spin" strokeWidth={2} />}
+            {saving ? "Speichert…" : "Speichern"}
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

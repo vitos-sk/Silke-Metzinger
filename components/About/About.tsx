@@ -100,12 +100,12 @@ export default function About() {
       <div className="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-start md:gap-12">
         {/* Mobil: kleines, immer sichtbares Sticky-Foto direkt unter der Navbar,
             das beim Scrollen synchron mit dem Kapitel wechselt. */}
-        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 bg-ivory/95 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
+        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 bg-ivory/95 px-6 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
           <div className="relative aspect-2/1 w-full overflow-hidden">
             <ChapterPhoto activeChapter={activeChapter} />
             <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-black/0 to-transparent" />
           </div>
-          <div className="mt-3 flex items-center justify-between gap-3 px-6">
+          <div className="mt-3 flex items-center justify-between gap-3">
             <AnimatePresence mode="wait">
               <motion.span
                 key={activeChapter}
