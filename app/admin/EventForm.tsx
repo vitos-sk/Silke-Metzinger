@@ -1,26 +1,66 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { NewsEvent } from "@/types/event";
 
 interface EventFormProps {
   initialEvent?: NewsEvent;
 }
 
+interface Draft {
+  title: string;
+  date: string;
+  description: string;
+  link: string;
+  order: number;
+  imageUrl: string | null;
+}
+
+function draftKey(isEditing: boolean, id?: string) {
+  return isEditing ? `admin-event-draft:${id}` : "admin-event-draft:new";
+}
+
+// Nach einem erzwungenen Re-Login (abgelaufene Session) die zwischengespeicherten
+// Eingaben wiederherstellen, statt dass der Nutzer die News neu abtippen muss.
+// Als lazy state-Initializer statt Effect, um kein zusätzliches Re-Render auszulösen.
+function loadDraft(storageKey: string): Draft | null {
+  if (typeof window === "undefined") return null;
+  const raw = sessionStorage.getItem(storageKey);
+  if (!raw) return null;
+  sessionStorage.removeItem(storageKey);
+  try {
+    return JSON.parse(raw) as Draft;
+  } catch {
+    return null;
+  }
+}
+
 export default function EventForm({ initialEvent }: EventFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const isEditing = Boolean(initialEvent);
+  const storageKey = draftKey(isEditing, initialEvent?.id);
 
-  const [title, setTitle] = useState(initialEvent?.title ?? "");
-  const [date, setDate] = useState(initialEvent?.date ?? "");
-  const [description, setDescription] = useState(initialEvent?.description ?? "");
-  const [link, setLink] = useState(initialEvent?.link ?? "");
-  const [order, setOrder] = useState(initialEvent?.order ?? 0);
-  const [imageUrl, setImageUrl] = useState<string | null>(initialEvent?.imageUrl ?? null);
+  const [draft] = useState(() => loadDraft(storageKey));
+
+  const [title, setTitle] = useState(draft?.title ?? initialEvent?.title ?? "");
+  const [date, setDate] = useState(draft?.date ?? initialEvent?.date ?? "");
+  const [description, setDescription] = useState(draft?.description ?? initialEvent?.description ?? "");
+  const [link, setLink] = useState(draft?.link ?? initialEvent?.link ?? "");
+  const [order, setOrder] = useState(draft?.order ?? initialEvent?.order ?? 0);
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    draft?.imageUrl ?? initialEvent?.imageUrl ?? null,
+  );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function saveDraftAndRedirectToLogin() {
+    const draft: Draft = { title, date, description, link, order, imageUrl };
+    sessionStorage.setItem(storageKey, JSON.stringify(draft));
+    router.push(`/admin/login?next=${encodeURIComponent(pathname)}`);
+  }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -35,6 +75,11 @@ export default function EventForm({ initialEvent }: EventFormProps) {
     const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
     setUploading(false);
 
+    if (res.status === 401) {
+      saveDraftAndRedirectToLogin();
+      return;
+    }
+
     if (!res.ok) {
       setError("Foto-Upload fehlgeschlagen.");
       return;
@@ -46,6 +91,12 @@ export default function EventForm({ initialEvent }: EventFormProps) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
+    if (!imageUrl) {
+      setError("Bitte lade ein Foto hoch.");
+      return;
+    }
+
     setSaving(true);
     setError(null);
 
@@ -62,11 +113,17 @@ export default function EventForm({ initialEvent }: EventFormProps) {
 
     setSaving(false);
 
+    if (res.status === 401) {
+      saveDraftAndRedirectToLogin();
+      return;
+    }
+
     if (!res.ok) {
       setError("Speichern fehlgeschlagen.");
       return;
     }
 
+    sessionStorage.removeItem(storageKey);
     router.push("/admin");
     router.refresh();
   }
@@ -141,7 +198,7 @@ export default function EventForm({ initialEvent }: EventFormProps) {
 
       <div>
         <label className="block text-sm text-text-primary" htmlFor="photo">
-          Foto
+          Foto (erforderlich)
         </label>
         <input id="photo" type="file" accept="image/*" onChange={handleFileChange} className="mt-1.5" />
         {uploading && <p className="mt-1 text-sm text-text-secondary">Lädt hoch…</p>}

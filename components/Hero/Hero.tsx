@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
@@ -47,10 +48,15 @@ export default function Hero() {
         className="order-2 -mx-4 md:order-2 md:col-start-2 md:row-start-1 md:row-span-2 md:mx-0"
       >
         <div className="aspect-square w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
-          {/* Platzhalter: /public/hero-photo.jpg, Kunde liefert Portraitfoto */}
-          <div className="flex h-full w-full items-center justify-center text-sm text-text-secondary">
-            Foto folgt
-          </div>
+          <Image
+            src="/foto1.jpg"
+            alt="Silke Metzinger"
+            width={580}
+            height={783}
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="h-full w-full object-cover"
+          />
         </div>
       </motion.div>
 

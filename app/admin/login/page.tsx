@@ -1,13 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const sessionExpired = searchParams.get("next") !== null;
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -27,7 +30,8 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push("/admin");
+    const next = searchParams.get("next");
+    router.push(next && next.startsWith("/admin") ? next : "/admin");
     router.refresh();
   }
 
@@ -41,6 +45,13 @@ export default function AdminLoginPage() {
         <p className="mt-1 text-sm text-text-secondary">
           Zugang zur Verwaltung von News &amp; Events.
         </p>
+
+        {sessionExpired && (
+          <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            Deine Sitzung ist abgelaufen. Bitte melde dich erneut an – deine Eingaben wurden
+            zwischengespeichert.
+          </p>
+        )}
 
         <label className="mt-6 block text-sm text-text-primary" htmlFor="password">
           Passwort
@@ -65,5 +76,13 @@ export default function AdminLoginPage() {
         </button>
       </form>
     </main>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }

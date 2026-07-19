@@ -15,6 +15,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Titel und Datum sind erforderlich" }, { status: 400 });
   }
 
+  if (!body.imageUrl) {
+    return NextResponse.json({ error: "Ein Foto ist erforderlich" }, { status: 400 });
+  }
+
   await updateEvent(id, body);
   revalidatePath("/");
   return NextResponse.json({ ok: true });

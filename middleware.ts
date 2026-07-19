@@ -56,9 +56,16 @@ export async function middleware(request: NextRequest) {
   const isValid = token ? await verifySessionToken(token) : false;
 
   if (!isValid) {
-    const response = pathname.startsWith("/api/")
-      ? NextResponse.json({ error: "Nicht autorisiert" }, { status: 401 })
-      : NextResponse.redirect(new URL("/admin/login", request.url));
+    let response: NextResponse;
+    if (pathname.startsWith("/api/")) {
+      response = NextResponse.json({ error: "Nicht autorisiert" }, { status: 401 });
+    } else {
+      const loginUrl = new URL("/admin/login", request.url);
+      if (pathname !== "/admin") {
+        loginUrl.searchParams.set("next", pathname);
+      }
+      response = NextResponse.redirect(loginUrl);
+    }
     if (justGated) {
       setGateCookie(response, await createGateToken());
     }

@@ -15,6 +15,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Titel und Datum sind erforderlich" }, { status: 400 });
   }
 
+  if (!body.imageUrl) {
+    return NextResponse.json({ error: "Ein Foto ist erforderlich" }, { status: 400 });
+  }
+
   const id = await createEvent(body);
   revalidatePath("/");
   return NextResponse.json({ id });

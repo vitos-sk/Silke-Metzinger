@@ -71,7 +71,10 @@ export async function POST(request: Request) {
   response.cookies.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    // Lax statt Strict: siehe middleware.ts (Gate-Cookie) - mobile Browser
+    // (v. a. iOS Safari nach App-Wechsel/Neustart) senden Strict-Cookies bei
+    // Top-Level-Navigationen nicht zuverlässig, was ungewollte Logouts verursacht.
+    sameSite: "lax",
     path: "/",
     maxAge: SESSION_MAX_AGE,
   });
