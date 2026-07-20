@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter, Cormorant } from "next/font/google";
 import MotionProvider from "@/components/motion/MotionProvider";
 import "./globals.css";
@@ -36,6 +36,13 @@ export const metadata: Metadata = {
     locale: "de_DE",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

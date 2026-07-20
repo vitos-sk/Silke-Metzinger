@@ -1,7 +1,7 @@
 export interface NewsEvent {
   id: string;
   title: string;
-  date: string;
+  date: string | null;
   description: string;
   imageUrl: string | null;
   link: string | null;
@@ -12,7 +12,7 @@ export interface NewsEvent {
 
 export interface NewsEventInput {
   title: string;
-  date: string;
+  date: string | null;
   description: string;
   imageUrl: string | null;
   link: string | null;

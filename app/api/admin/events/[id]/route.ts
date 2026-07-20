@@ -11,8 +11,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
   const { id } = await params;
   const body = (await request.json()) as NewsEventInput;
 
-  if (!body.title || !body.date) {
-    return NextResponse.json({ error: "Titel und Datum sind erforderlich" }, { status: 400 });
+  if (!body.title) {
+    return NextResponse.json({ error: "Titel ist erforderlich" }, { status: 400 });
   }
 
   if (!body.imageUrl) {

@@ -63,10 +63,12 @@ export default async function AdminPage() {
 
               <div className="min-w-0 flex-1">
                 <p className="truncate font-serif text-text-primary">{event.title}</p>
-                <p className="flex items-center gap-1 text-xs text-text-secondary sm:text-sm">
-                  <CalendarDays className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
-                  <span className="truncate">{event.date}</span>
-                </p>
+                {event.date && (
+                  <p className="flex items-center gap-1 text-xs text-text-secondary sm:text-sm">
+                    <CalendarDays className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
+                    <span className="truncate">{event.date}</span>
+                  </p>
+                )}
               </div>
 
               <div className="flex shrink-0 items-center gap-1">

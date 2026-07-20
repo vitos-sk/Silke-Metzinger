@@ -123,14 +123,14 @@ export default function Services() {
 
         <Reveal>
           <div className="relative mt-16 overflow-hidden rounded-3xl p-2 sm:p-10">
-            <BotanicalLeaf className="pointer-events-none absolute top-0 left-0 h-28 w-16 -rotate-[25deg] text-[#a8b87c] opacity-30 sm:h-40 sm:w-24" />
-            <BotanicalLeaf className="pointer-events-none absolute top-2 right-2 h-24 w-14 rotate-[35deg] text-[#c8b89a] opacity-25 sm:h-32 sm:w-[4.6rem]" />
-            <BotanicalLeaf className="pointer-events-none absolute right-0 bottom-0 h-32 w-[4.6rem] rotate-[15deg] text-[#a8b87c] opacity-30 sm:h-44 sm:w-[6.4rem]" />
-            <BotanicalLeaf className="pointer-events-none absolute bottom-2 left-2 h-28 w-16 -rotate-[10deg] text-[#c8b89a] opacity-25 sm:h-36 sm:w-20" />
-            <BotanicalLeaf className="pointer-events-none absolute top-1/2 left-0 hidden h-24 w-14 -translate-y-1/2 rotate-[60deg] text-[#a8b87c] opacity-20 md:block" />
-            <BotanicalLeaf className="pointer-events-none absolute top-1/3 right-0 hidden h-24 w-14 rotate-[-50deg] text-[#c8b89a] opacity-20 md:block" />
+            <BotanicalLeaf className="pointer-events-none absolute top-0 left-0 h-36 w-20 -rotate-[25deg] text-[#a8b87c] opacity-35 sm:h-52 sm:w-28" />
+            <BotanicalLeaf className="pointer-events-none absolute top-2 right-2 h-32 w-16 rotate-[35deg] text-[#c8b89a] opacity-30 sm:h-44 sm:w-24" />
+            <BotanicalLeaf className="pointer-events-none absolute right-0 bottom-0 h-40 w-20 rotate-15 text-[#a8b87c] opacity-35 sm:h-56 sm:w-32" />
+            <BotanicalLeaf className="pointer-events-none absolute bottom-2 left-2 h-36 w-20 -rotate-[10deg] text-[#c8b89a] opacity-30 sm:h-48 sm:w-28" />
+            <BotanicalLeaf className="pointer-events-none absolute top-1/2 left-0 hidden h-40 w-24 -translate-y-1/2 rotate-[60deg] text-[#a8b87c] opacity-25 md:block" />
+            <BotanicalLeaf className="pointer-events-none absolute top-1/3 right-0 hidden h-40 w-24 rotate-[-50deg] text-[#c8b89a] opacity-25 md:block" />
 
-            <div className="relative rounded-3xl border border-white/40 bg-white/25 p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-lg sm:p-8 md:p-12">
+            <div className="relative rounded-3xl border border-white/30 bg-white/5 p-6 text-center backdrop-blur-lg sm:p-8 md:p-12">
               <motion.div
                 aria-hidden
                 className="pointer-events-none absolute -top-4 left-6 hidden text-gold/30 sm:block"

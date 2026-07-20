@@ -125,7 +125,14 @@ export default function EventForm({ initialEvent }: EventFormProps) {
     setSaving(true);
     setError(null);
 
-    const payload = { title, date, description, link: link || null, imageUrl, order: Number(order) };
+    const payload = {
+      title,
+      date: date || null,
+      description,
+      link: link || null,
+      imageUrl,
+      order: Number(order),
+    };
 
     let res: Response;
     try {
@@ -182,13 +189,12 @@ export default function EventForm({ initialEvent }: EventFormProps) {
       <div>
         <label className={labelClass} htmlFor="date">
           <Calendar className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
-          Datum (z. B. 12. September 2026)
+          Datum (optional, z. B. 12. September 2026)
         </label>
         <input
           id="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          required
           className={fieldClass}
         />
       </div>
@@ -242,6 +248,9 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           <ImagePlus className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Foto (erforderlich)
         </span>
+        <p className="mt-1 text-xs text-text-secondary">
+          Querformat, Seitenverhältnis 16:10 (z. B. 1600 × 1000 px), mind. 1200 × 750 px
+        </p>
 
         <input
           ref={fileInputRef}

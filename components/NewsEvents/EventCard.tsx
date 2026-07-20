@@ -61,10 +61,12 @@ export default function EventCard({ event, index }: { event: NewsEvent; index: n
             </div>
           </>
         )}
-        <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-sage px-3 py-1 text-xs text-ivory">
-          <CalendarDays className="h-3 w-3" />
-          {event.date}
-        </span>
+        {event.date && (
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-sage px-3 py-1 text-xs text-ivory">
+            <CalendarDays className="h-3 w-3" />
+            {event.date}
+          </span>
+        )}
         <Leaf
           className="absolute right-3 top-3 h-4 w-4 rotate-12 text-gold/60"
           strokeWidth={1.5}
