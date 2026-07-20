@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -18,8 +19,36 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // TODO: E-Mail-Versand über Resend an info.silke-metzinger@gmx.ch implementieren.
-  // Benötigt RESEND_API_KEY in .env.local
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.CONTACT_EMAIL_TO;
+
+  if (!apiKey || !to) {
+    console.error(
+      "Kontaktformular: RESEND_API_KEY oder CONTACT_EMAIL_TO fehlt in .env.local",
+    );
+    return NextResponse.json(
+      { error: "Der Versand ist derzeit nicht verfügbar. Bitte versuche es später erneut." },
+      { status: 500 },
+    );
+  }
+
+  const resend = new Resend(apiKey);
+
+  const { error } = await resend.emails.send({
+    from: process.env.CONTACT_EMAIL_FROM ?? "Kontaktformular <onboarding@resend.dev>",
+    to,
+    replyTo: email,
+    subject: `Neue Nachricht von ${firstName} ${lastName}`,
+    text: `Name: ${firstName} ${lastName}\nE-Mail: ${email}\n\nNachricht:\n${message}`,
+  });
+
+  if (error) {
+    console.error("Kontaktformular: Resend-Fehler", error);
+    return NextResponse.json(
+      { error: "Etwas ist schiefgelaufen. Bitte versuche es erneut." },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({ success: true });
 }
