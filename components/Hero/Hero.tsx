@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
@@ -12,6 +12,15 @@ export default function Hero() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
+
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
 
   const photoY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const blobY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
@@ -40,7 +49,7 @@ export default function Hero() {
       </RevealItem>
 
       <motion.div
-        style={{ y: photoY }}
+        style={isDesktop ? { y: photoY } : undefined}
         initial={{ opacity: 0, scale: 0.94 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.4 }}

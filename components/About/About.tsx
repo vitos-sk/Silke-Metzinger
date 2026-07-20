@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
@@ -13,14 +14,38 @@ const CHAPTERS: { id: ChapterId; index: string; tag: string }[] = [
   { id: "privat", index: "04", tag: "Privat" },
 ];
 
-// Platzhalter-Fotos pro Kapitel: unterschiedliche Farben, damit der
+// Es gibt 4 Kapitel im Textverlauf, aber nur 3 Fotos: „Heute“ und „Privat“
+// teilen sich dasselbe Foto (gleiche Lebensphase), daher dieselbe Fotogruppe.
+type PhotoGroupId = "vorher" | "wendepunkt" | "heute";
+
+const CHAPTER_PHOTO_GROUP: Record<ChapterId, PhotoGroupId> = {
+  vorher: "vorher",
+  wendepunkt: "wendepunkt",
+  heute: "heute",
+  privat: "heute",
+};
+
+// Platzhalter-Fotos pro Fotogruppe: unterschiedliche Farben, damit der
 // Wechsel-Effekt beim Scrollen sichtbar ist. Werden später durch
-// echte Fotos vom Kunden ersetzt (ein Bild pro Kapitel).
-const CHAPTER_PHOTOS: Record<ChapterId, { from: string; to: string; label: string }> = {
+// echte Fotos vom Kunden ersetzt (ein Bild pro Gruppe).
+const CHAPTER_PHOTOS: Record<PhotoGroupId, { from: string; to: string; label: string }> = {
   vorher: { from: "from-sage/50", to: "to-sage/15", label: "Foto folgt — Vorher" },
   wendepunkt: { from: "from-gold/60", to: "to-gold/20", label: "Foto folgt — 2019" },
   heute: { from: "from-rose-300/70", to: "to-rose-100/30", label: "Foto folgt — Heute" },
-  privat: { from: "from-sky-300/70", to: "to-sky-100/30", label: "Foto folgt — Privat" },
+};
+
+// Echte Fotos, sobald vorhanden. Gruppen ohne Eintrag zeigen weiterhin
+// die Farbfläche aus CHAPTER_PHOTOS als Platzhalter.
+const CHAPTER_IMAGES: Partial<Record<PhotoGroupId, string>> = {
+  vorher: "/foto4.png",
+  wendepunkt: "/foto3.png",
+  heute: "/foto2.png",
+};
+
+// Manche Fotos sind nicht mittig geschnitten (Portrait-Rahmen bei
+// Querformat-Foto). Hier lässt sich der Bildausschnitt pro Foto korrigieren.
+const CHAPTER_IMAGE_POSITION: Partial<Record<PhotoGroupId, string>> = {
+  wendepunkt: "object-[85%_center]",
 };
 
 function ChapterPhoto({
@@ -30,18 +55,40 @@ function ChapterPhoto({
   activeChapter: ChapterId;
   className?: string;
 }) {
+  const group = CHAPTER_PHOTO_GROUP[activeChapter];
+  const image = CHAPTER_IMAGES[group];
+
   return (
     <AnimatePresence mode="wait">
-      <motion.div
-        key={activeChapter}
-        initial={{ opacity: 0, scale: 1.03 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-sm text-text-secondary ${CHAPTER_PHOTOS[activeChapter].from} ${CHAPTER_PHOTOS[activeChapter].to} ${className ?? ""}`}
-      >
-        {CHAPTER_PHOTOS[activeChapter].label}
-      </motion.div>
+      {image ? (
+        <motion.div
+          key={group}
+          initial={{ opacity: 0, scale: 1.03 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className={`absolute inset-0 ${className ?? ""}`}
+        >
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className={`object-cover ${CHAPTER_IMAGE_POSITION[group] ?? ""}`}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          key={group}
+          initial={{ opacity: 0, scale: 1.03 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-sm text-text-secondary ${CHAPTER_PHOTOS[group].from} ${CHAPTER_PHOTOS[group].to} ${className ?? ""}`}
+        >
+          {CHAPTER_PHOTOS[group].label}
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
@@ -63,7 +110,7 @@ function Chapter({
     <motion.div
       className="relative"
       onViewportEnter={() => onActive(id)}
-      viewport={{ margin: "-45% 0px -45% 0px" }}
+      viewport={{ margin: "-20% 0px -65% 0px" }}
     >
       <span
         aria-hidden
@@ -100,12 +147,12 @@ export default function About() {
       <div className="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-start md:gap-12">
         {/* Mobil: kleines, immer sichtbares Sticky-Foto direkt unter der Navbar,
             das beim Scrollen synchron mit dem Kapitel wechselt. */}
-        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 bg-ivory/95 px-6 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
+        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 bg-ivory/95 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm md:hidden">
           <div className="relative aspect-2/1 w-full overflow-hidden">
             <ChapterPhoto activeChapter={activeChapter} />
             <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-black/0 to-transparent" />
           </div>
-          <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="mt-3 flex items-center justify-between gap-3 px-6">
             <AnimatePresence mode="wait">
               <motion.span
                 key={activeChapter}
@@ -164,7 +211,7 @@ export default function About() {
         </div>
 
         <div>
-          <div className="flex flex-col gap-12 border-l border-sage/20 pl-6 md:gap-16 md:pl-8">
+          <div className="flex flex-col gap-12 border-l border-sage/20 pl-6 md:gap-16 md:pl-8 md:pb-40">
           <Chapter id="vorher" active={activeChapter === "vorher"} onActive={setActiveChapter}>
             <RevealItem>
               <p className="text-text-secondary">
