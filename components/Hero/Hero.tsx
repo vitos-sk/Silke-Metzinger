@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { ASSET_V } from "@/lib/assetVersion";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,7 +59,7 @@ export default function Hero() {
       >
         <div className="aspect-580/783 w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
           <Image
-            src="/foto1.jpg"
+            src={`/foto1.jpg?v=${ASSET_V}`}
             alt="Silke Metzinger"
             width={580}
             height={783}

@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { ASSET_V } from "@/lib/assetVersion";
 
 type ChapterId = "vorher" | "wendepunkt" | "heute" | "privat";
 
@@ -37,15 +38,15 @@ const CHAPTER_PHOTOS: Record<PhotoGroupId, { from: string; to: string; label: st
 // Echte Fotos, sobald vorhanden. Gruppen ohne Eintrag zeigen weiterhin
 // die Farbfläche aus CHAPTER_PHOTOS als Platzhalter.
 const CHAPTER_IMAGES: Partial<Record<PhotoGroupId, string>> = {
-  vorher: "/foto4.png",
-  wendepunkt: "/foto3.png",
-  heute: "/foto2.png",
+  vorher: `/foto4.png?v=${ASSET_V}`,
+  wendepunkt: `/foto3.png?v=${ASSET_V}`,
+  heute: `/foto2.png?v=${ASSET_V}`,
 };
 
 // Manche Fotos sind nicht mittig geschnitten (Portrait-Rahmen bei
 // Querformat-Foto). Hier lässt sich der Bildausschnitt pro Foto korrigieren.
 const CHAPTER_IMAGE_POSITION: Partial<Record<PhotoGroupId, string>> = {
-  wendepunkt: "object-[95%_center]",
+  wendepunkt: "object-[58%_center]",
 };
 
 function ChapterPhoto({

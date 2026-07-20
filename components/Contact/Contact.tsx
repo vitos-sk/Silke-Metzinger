@@ -9,6 +9,7 @@ import {
 } from "@/components/icons/BrandIcons";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
 import { Reveal } from "@/components/motion/Reveal";
+import { ASSET_V } from "@/lib/assetVersion";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -230,7 +231,7 @@ export default function Contact() {
           <Reveal direction="right" className="space-y-8">
             <div className="flex flex-col items-center gap-4 text-center">
               <img
-                src="/silke-photo-contact.jpg"
+                src={`/silke-photo-contact.jpg?v=${ASSET_V}`}
                 alt="Silke Metzinger – Ernährungsberaterin & Coach"
                 className="h-36 w-36 rounded-full object-cover ring-4 ring-gold md:h-54 md:w-54"
               />

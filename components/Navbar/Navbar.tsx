@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ScrollProgress from "@/components/motion/ScrollProgress";
+import { ASSET_V } from "@/lib/assetVersion";
 
 const NAV_LINKS = [
   { href: "#home", label: "Home" },
@@ -103,7 +104,7 @@ export default function Navbar() {
         >
           <a href="#home" className="flex items-center">
             <Image
-              src="/logo.png"
+              src={`/logo.png?v=${ASSET_V}`}
               alt="Silke Metzinger"
               width={949}
               height={312}

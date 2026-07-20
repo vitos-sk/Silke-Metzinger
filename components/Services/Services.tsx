@@ -77,7 +77,10 @@ function BotanicalLeaf({ className }: { className?: string }) {
 
 export default function Services() {
   return (
-    <section id="leistungen" className="scroll-mt-32 bg-ivory px-6 py-20">
+    <section
+      id="leistungen"
+      className="scroll-mt-32 overflow-x-hidden bg-ivory px-6 py-20"
+    >
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
@@ -122,13 +125,15 @@ export default function Services() {
         </div>
 
         <Reveal>
-          <div className="relative mt-16 overflow-hidden rounded-3xl p-2 sm:p-10">
-            <BotanicalLeaf className="pointer-events-none absolute top-0 left-0 h-36 w-20 -rotate-[25deg] text-[#a8b87c] opacity-35 sm:h-52 sm:w-28" />
-            <BotanicalLeaf className="pointer-events-none absolute top-2 right-2 h-32 w-16 rotate-[35deg] text-[#c8b89a] opacity-30 sm:h-44 sm:w-24" />
-            <BotanicalLeaf className="pointer-events-none absolute right-0 bottom-0 h-40 w-20 rotate-15 text-[#a8b87c] opacity-35 sm:h-56 sm:w-32" />
-            <BotanicalLeaf className="pointer-events-none absolute bottom-2 left-2 h-36 w-20 -rotate-[10deg] text-[#c8b89a] opacity-30 sm:h-48 sm:w-28" />
-            <BotanicalLeaf className="pointer-events-none absolute top-1/2 left-0 hidden h-40 w-24 -translate-y-1/2 rotate-[60deg] text-[#a8b87c] opacity-25 md:block" />
-            <BotanicalLeaf className="pointer-events-none absolute top-1/3 right-0 hidden h-40 w-24 rotate-[-50deg] text-[#c8b89a] opacity-25 md:block" />
+          <div className="relative mt-16 rounded-3xl p-2 sm:p-10">
+            <BotanicalLeaf className="pointer-events-none absolute -top-4 -left-6 h-32 w-18 rotate-[-32deg] text-[#a8b87c] opacity-35 sm:-top-8 sm:-left-10 sm:h-48 sm:w-26" />
+            <BotanicalLeaf className="pointer-events-none absolute top-10 -right-3 h-24 w-14 rotate-18 text-[#c8b89a] opacity-25 sm:top-16 sm:-right-8 sm:h-36 sm:w-20" />
+            <BotanicalLeaf className="pointer-events-none absolute -top-2 right-14 hidden h-28 w-16 rotate-52 text-[#a8b87c] opacity-20 sm:block sm:right-24 sm:h-40 sm:w-22" />
+            <BotanicalLeaf className="pointer-events-none absolute -right-5 bottom-6 h-36 w-20 rotate-8 text-[#a8b87c] opacity-35 sm:-right-12 sm:bottom-4 sm:h-52 sm:w-30" />
+            <BotanicalLeaf className="pointer-events-none absolute -bottom-6 left-10 h-32 w-18 rotate-[-14deg] text-[#c8b89a] opacity-30 sm:-bottom-10 sm:left-16 sm:h-44 sm:w-24" />
+            <BotanicalLeaf className="pointer-events-none absolute bottom-16 -left-4 hidden h-28 w-16 rotate-[-42deg] text-[#c8b89a] opacity-20 sm:block sm:bottom-24 sm:-left-9 sm:h-36 sm:w-20" />
+            <BotanicalLeaf className="pointer-events-none absolute top-1/2 -left-14 hidden h-40 w-24 -translate-y-1/2 rotate-70 text-[#a8b87c] opacity-20 md:block" />
+            <BotanicalLeaf className="pointer-events-none absolute top-1/3 -right-14 hidden h-40 w-24 rotate-[-58deg] text-[#c8b89a] opacity-20 md:block" />
 
             <div className="relative rounded-3xl border border-white/30 bg-white/5 p-6 text-center backdrop-blur-lg sm:p-8 md:p-12">
               <motion.div

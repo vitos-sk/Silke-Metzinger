@@ -23,6 +23,8 @@ html {
 body {
   background: var(--color-ivory);
   color: var(--color-text-primary);
+  overflow-x: clip;
+  width: 100%;
 }
 
 :where(section[id]) {
