@@ -122,7 +122,7 @@ export default function Services() {
         </div>
 
         <Reveal>
-          <div className="relative mt-16 overflow-hidden rounded-3xl p-6 sm:p-10">
+          <div className="relative mt-16 overflow-hidden rounded-3xl p-2 sm:p-10">
             <BotanicalLeaf className="pointer-events-none absolute top-0 left-0 h-28 w-16 -rotate-[25deg] text-[#a8b87c] opacity-30 sm:h-40 sm:w-24" />
             <BotanicalLeaf className="pointer-events-none absolute top-2 right-2 h-24 w-14 rotate-[35deg] text-[#c8b89a] opacity-25 sm:h-32 sm:w-[4.6rem]" />
             <BotanicalLeaf className="pointer-events-none absolute right-0 bottom-0 h-32 w-[4.6rem] rotate-[15deg] text-[#a8b87c] opacity-30 sm:h-44 sm:w-[6.4rem]" />
