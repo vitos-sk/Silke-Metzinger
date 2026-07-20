@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   AlertCircle,
@@ -9,6 +9,8 @@ import {
   ImagePlus,
   Link2,
   Loader2,
+  Minus,
+  Plus,
   Text,
   Type,
   X,
@@ -65,13 +67,23 @@ export default function EventForm({ initialEvent }: EventFormProps) {
   const [date, setDate] = useState(draft?.date ?? initialEvent?.date ?? "");
   const [description, setDescription] = useState(draft?.description ?? initialEvent?.description ?? "");
   const [link, setLink] = useState(draft?.link ?? initialEvent?.link ?? "");
-  const [order, setOrder] = useState(draft?.order ?? initialEvent?.order ?? 0);
+  const [order, setOrder] = useState(draft?.order ?? initialEvent?.order ?? 1);
   const [imageUrl, setImageUrl] = useState<string | null>(
     draft?.imageUrl ?? initialEvent?.imageUrl ?? null,
   );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [otherEvents, setOtherEvents] = useState<NewsEvent[]>([]);
+
+  useEffect(() => {
+    fetch("/api/admin/events")
+      .then((res) => (res.ok ? (res.json() as Promise<NewsEvent[]>) : []))
+      .then((events) => setOtherEvents(events.filter((ev) => ev.id !== initialEvent?.id)))
+      .catch(() => {});
+  }, [initialEvent?.id]);
+
+  const orderConflict = otherEvents.find((ev) => ev.order === Number(order));
 
   function saveDraftAndRedirectToLogin() {
     const draft: Draft = { title, date, description, link, order, imageUrl };
@@ -119,6 +131,13 @@ export default function EventForm({ initialEvent }: EventFormProps) {
 
     if (!imageUrl) {
       setError("Bitte lade ein Foto hoch.");
+      return;
+    }
+
+    if (orderConflict) {
+      setError(
+        `Reihenfolge ${order} ist bereits von „${orderConflict.title}“ belegt. Bitte wähle eine andere Zahl.`,
+      );
       return;
     }
 
@@ -233,14 +252,46 @@ export default function EventForm({ initialEvent }: EventFormProps) {
           <ArrowUpDown className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
           Reihenfolge (kleinere Zahl zuerst)
         </label>
-        <input
-          id="order"
-          type="number"
-          inputMode="numeric"
-          value={order}
-          onChange={(e) => setOrder(Number(e.target.value))}
-          className={`${fieldClass} w-24 text-center`}
-        />
+        <div
+          className={`mt-1.5 flex w-32 items-stretch overflow-hidden rounded-xl border bg-white transition-colors focus-within:ring-2 ${
+            orderConflict
+              ? "border-red-300 focus-within:border-red-400 focus-within:ring-red-200"
+              : "border-black/10 focus-within:border-sage focus-within:ring-sage/20"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => setOrder((o) => Math.max(1, o - 1))}
+            aria-label="Reihenfolge verringern"
+            className="flex w-10 shrink-0 items-center justify-center text-text-secondary transition-colors hover:bg-black/5 active:bg-black/10"
+          >
+            <Minus className="h-4 w-4" strokeWidth={2} />
+          </button>
+          <input
+            id="order"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            value={order}
+            onChange={(e) => setOrder(e.target.value === "" ? 1 : Number(e.target.value))}
+            onFocus={(e) => e.target.select()}
+            className="w-full border-0 bg-transparent py-3 text-center text-base text-text-primary outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          />
+          <button
+            type="button"
+            onClick={() => setOrder((o) => o + 1)}
+            aria-label="Reihenfolge erhöhen"
+            className="flex w-10 shrink-0 items-center justify-center text-text-secondary transition-colors hover:bg-black/5 active:bg-black/10"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} />
+          </button>
+        </div>
+        {orderConflict && (
+          <p className="mt-1.5 flex items-center gap-1.5 text-xs text-red-600">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
+            Platz {order} ist schon von „{orderConflict.title}&ldquo; belegt.
+          </p>
+        )}
       </div>
 
       <div>
@@ -312,7 +363,7 @@ export default function EventForm({ initialEvent }: EventFormProps) {
         <div className="mx-auto max-w-3xl sm:mx-0">
           <button
             type="submit"
-            disabled={saving || uploading}
+            disabled={saving || uploading || Boolean(orderConflict)}
             className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-5 py-3.5 text-base font-medium text-ivory shadow-[0_8px_24px_-6px_rgba(143,175,138,0.55)] ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(143,175,138,0.65)] active:translate-y-0 disabled:pointer-events-none disabled:opacity-60 sm:w-auto"
           >
             <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
