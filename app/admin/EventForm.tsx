@@ -129,11 +129,6 @@ export default function EventForm({ initialEvent }: EventFormProps) {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    if (!imageUrl) {
-      setError("Bitte lade ein Foto hoch.");
-      return;
-    }
-
     if (orderConflict) {
       setError(
         `Reihenfolge ${order} ist bereits von „${orderConflict.title}“ belegt. Bitte wähle eine andere Zahl.`,
@@ -297,7 +292,7 @@ export default function EventForm({ initialEvent }: EventFormProps) {
       <div>
         <span className={labelClass}>
           <ImagePlus className="h-4 w-4 text-text-secondary" strokeWidth={1.75} />
-          Foto (erforderlich)
+          Foto (optional)
         </span>
         <p className="mt-1 text-xs text-text-secondary">
           Querformat, Seitenverhältnis 16:10 (z. B. 1600 × 1000 px), mind. 1200 × 750 px

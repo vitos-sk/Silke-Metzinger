@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar/Navbar";
 import Hero from "@/components/Hero/Hero";
+import LeadMagnetSection from "@/components/LeadMagnet/LeadMagnetSection";
 import Pillars from "@/components/Pillars/Pillars";
 import Services from "@/components/Services/Services";
 import About from "@/components/About/About";
@@ -16,6 +17,7 @@ export default function Home() {
       <Navbar />
       <main className="pt-(--navbar-h)">
         <Hero />
+        <LeadMagnetSection />
         <Pillars />
         <About />
         <HowIWork />

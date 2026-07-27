@@ -58,6 +58,20 @@ export default function HowIWork() {
               sondern du.
             </p>
           </Reveal>
+          <Reveal delay={0.15}>
+            <p>
+              Ich persönlich nutze die Vitalstoffe von Lifeplus. Hier der Link
+              zu meinem Online-Shop:{" "}
+              <a
+                href="https://www.lifeplus.com/SHGL5B/S/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-sage underline underline-offset-2 hover:text-sage/80"
+              >
+                LifePlus
+              </a>
+            </p>
+          </Reveal>
         </div>
 
         <RevealGroup

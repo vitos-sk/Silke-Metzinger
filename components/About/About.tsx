@@ -1,300 +1,86 @@
-"use client";
-
-import { useState, type ReactNode } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { ASSET_V } from "@/lib/assetVersion";
 
-type ChapterId = "vorher" | "wendepunkt" | "heute" | "privat";
-
-const CHAPTERS: { id: ChapterId; index: string; tag: string }[] = [
-  { id: "vorher", index: "01", tag: "Vorher" },
-  { id: "wendepunkt", index: "02", tag: "2019 · Der Wendepunkt" },
-  { id: "heute", index: "03", tag: "Heute" },
-  { id: "privat", index: "04", tag: "Privat" },
-];
-
-// Es gibt 4 Kapitel im Textverlauf, aber nur 3 Fotos: „Heute“ und „Privat“
-// teilen sich dasselbe Foto (gleiche Lebensphase), daher dieselbe Fotogruppe.
-type PhotoGroupId = "vorher" | "wendepunkt" | "heute";
-
-const CHAPTER_PHOTO_GROUP: Record<ChapterId, PhotoGroupId> = {
-  vorher: "vorher",
-  wendepunkt: "wendepunkt",
-  heute: "heute",
-  privat: "heute",
-};
-
-// Platzhalter-Fotos pro Fotogruppe: unterschiedliche Farben, damit der
-// Wechsel-Effekt beim Scrollen sichtbar ist. Werden später durch
-// echte Fotos vom Kunden ersetzt (ein Bild pro Gruppe).
-const CHAPTER_PHOTOS: Record<PhotoGroupId, { from: string; to: string; label: string }> = {
-  vorher: { from: "from-sage/50", to: "to-sage/15", label: "Foto folgt — Vorher" },
-  wendepunkt: { from: "from-gold/60", to: "to-gold/20", label: "Foto folgt — 2019" },
-  heute: { from: "from-rose-300/70", to: "to-rose-100/30", label: "Foto folgt — Heute" },
-};
-
-// Echte Fotos, sobald vorhanden. Gruppen ohne Eintrag zeigen weiterhin
-// die Farbfläche aus CHAPTER_PHOTOS als Platzhalter.
-const CHAPTER_IMAGES: Partial<Record<PhotoGroupId, string>> = {
-  vorher: `/foto4.png?v=${ASSET_V}`,
-  wendepunkt: `/foto3.png?v=${ASSET_V}`,
-  heute: `/foto2.png?v=${ASSET_V}`,
-};
-
-// Manche Fotos sind nicht mittig geschnitten (Portrait-Rahmen bei
-// Querformat-Foto). Hier lässt sich der Bildausschnitt pro Foto korrigieren.
-const CHAPTER_IMAGE_POSITION: Partial<Record<PhotoGroupId, string>> = {
-  wendepunkt: "object-[58%_center]",
-};
-
-function ChapterPhoto({
-  activeChapter,
-  className,
-}: {
-  activeChapter: ChapterId;
-  className?: string;
-}) {
-  const group = CHAPTER_PHOTO_GROUP[activeChapter];
-  const image = CHAPTER_IMAGES[group];
-
-  return (
-    <AnimatePresence mode="wait">
-      {image ? (
-        <motion.div
-          key={group}
-          initial={{ opacity: 0, scale: 1.03 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className={`absolute inset-0 ${className ?? ""}`}
-        >
-          <Image
-            src={image}
-            alt=""
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className={`object-cover ${CHAPTER_IMAGE_POSITION[group] ?? ""}`}
-          />
-        </motion.div>
-      ) : (
-        <motion.div
-          key={group}
-          initial={{ opacity: 0, scale: 1.03 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className={`absolute inset-0 flex items-center justify-center bg-linear-to-br text-sm text-text-secondary ${CHAPTER_PHOTOS[group].from} ${CHAPTER_PHOTOS[group].to} ${className ?? ""}`}
-        >
-          {CHAPTER_PHOTOS[group].label}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-function Chapter({
-  id,
-  active,
-  onActive,
-  children,
-}: {
-  id: ChapterId;
-  active: boolean;
-  onActive: (id: ChapterId) => void;
-  children: ReactNode;
-}) {
-  const chapter = CHAPTERS.find((c) => c.id === id)!;
-
-  return (
-    <motion.div
-      className="relative"
-      onViewportEnter={() => onActive(id)}
-      viewport={{ margin: "-20% 0px -65% 0px" }}
-    >
-      <span
-        aria-hidden
-        className={`absolute -left-7 top-1.5 h-3 w-3 rounded-full ring-4 ring-ivory transition-colors duration-300 md:-left-9.75 md:h-3.5 md:w-3.5 ${
-          active ? "bg-gold" : "bg-sage/40"
-        }`}
-      />
-      <p
-        className={`text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-300 ${
-          active ? "text-gold" : "text-text-secondary/70"
-        }`}
-      >
-        {chapter.index} — {chapter.tag}
-      </p>
-      <RevealGroup className="mt-4" stagger={0.1}>
-        {children}
-      </RevealGroup>
-    </motion.div>
-  );
-}
-
 export default function About() {
-  const [activeChapter, setActiveChapter] = useState<ChapterId>("vorher");
-  const activeTag = CHAPTERS.find((c) => c.id === activeChapter)!.tag;
-
   return (
     <section id="ueber-mich" className="mx-auto max-w-6xl scroll-mt-32 px-6 py-20">
       <Reveal>
         <h2 className="font-serif text-3xl text-text-primary md:text-4xl">
-          „Ich glaube an die Kraft der Veränderung.“
+          Über mich
         </h2>
       </Reveal>
 
       <div className="mt-10 grid gap-10 md:mt-12 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-start md:gap-12">
-        {/* Mobil: kleines, immer sichtbares Sticky-Foto direkt unter der Navbar,
-            das beim Scrollen synchron mit dem Kapitel wechselt. */}
-        <div className="sticky top-[var(--navbar-h)] z-10 -mx-6 transform-gpu bg-ivory/95 pb-3 shadow-[0_1px_0_0_rgba(143,175,138,0.25)] backdrop-blur-sm will-change-transform md:hidden">
-          <div className="relative aspect-2/1 w-full overflow-hidden">
-            <ChapterPhoto activeChapter={activeChapter} />
-            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 via-black/0 to-transparent" />
-          </div>
-          <div className="mt-3 flex items-center justify-between gap-3 px-6">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={activeChapter}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3 }}
-                className={`text-xs font-medium uppercase tracking-[0.2em] ${
-                  activeChapter === "wendepunkt" ? "text-gold" : "text-text-secondary"
-                }`}
-              >
-                {activeTag}
-              </motion.span>
-            </AnimatePresence>
-            <div className="flex shrink-0 gap-1.5">
-              {CHAPTERS.map((c) => (
-                <span
-                  key={c.id}
-                  className={`h-1.5 w-1.5 rounded-full transition-colors duration-300 ${
-                    c.id === activeChapter ? "bg-gold" : "bg-sage/30"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop: großes Sticky-Foto in eigener Spalte. */}
-        <div className="hidden md:sticky md:top-32 md:block md:self-start">
+        <div className="md:sticky md:top-32 md:self-start">
           <Reveal direction="right">
             <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl">
-              {/* Platzhalter: pro Kapitel ein Foto vom Kunden (z. B. /public/about-<kapitel>.jpg).
-                  Die Farbflächen hier zeigen nur, dass das Bild synchron zum Scroll-Fortschritt wechselt. */}
-              <ChapterPhoto activeChapter={activeChapter} />
-              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/45 via-black/0 to-transparent" />
-              <div className="absolute inset-x-5 bottom-5">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={activeChapter}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium ring-1 ring-white/25 backdrop-blur-sm ${
-                      activeChapter === "wendepunkt"
-                        ? "bg-gold text-ivory"
-                        : "bg-black/50 text-ivory"
-                    }`}
-                  >
-                    {activeTag}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
+              <Image
+                src={`/foto2.png?v=${ASSET_V}`}
+                alt="Silke Metzinger"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
             </div>
           </Reveal>
         </div>
 
-        <div>
-          <div className="flex flex-col gap-12 border-l border-sage/20 pl-6 md:gap-16 md:pl-8 md:pb-40">
-          <Chapter id="vorher" active={activeChapter === "vorher"} onActive={setActiveChapter}>
-            <RevealItem>
-              <p className="text-text-secondary">
-                Nicht, weil das Leben immer einfach ist. Sondern weil ich
-                erlebt habe, dass selbst herausfordernde Zeiten neue
-                Möglichkeiten eröffnen können.
-              </p>
-            </RevealItem>
-            <RevealItem>
-              <p className="mt-4 text-text-secondary">
-                Ich bin{" "}
-                <strong className="text-text-primary">Silke Metzinger</strong>{" "}
-                und begleite Menschen, die tief in sich spüren, dass ihr Leben
-                leichter, gesünder und freier sein darf.
-              </p>
-            </RevealItem>
-            <RevealItem>
-              <p className="mt-4 text-text-secondary">
-                Ich höre zu. Ich stelle Fragen. Ich eröffne neue Perspektiven.
-              </p>
-            </RevealItem>
-          </Chapter>
-
-          <Chapter
-            id="wendepunkt"
-            active={activeChapter === "wendepunkt"}
-            onActive={setActiveChapter}
-          >
-            <RevealItem>
-              <div className="rounded-3xl bg-ivory p-6 ring-1 ring-gold/20 md:p-8">
-                <p className="text-text-secondary">
-                  Warum mir Gesundheit, Zeit und Freiheit am Herzen liegen:
-                </p>
-                <p className="mt-6 text-text-secondary">
-                  Manchmal verändert ein einziger Moment ein ganzes Leben.
-                  Dieser kam 2019, als ich mit 47 Jahren die Diagnose
-                  Bauchspeicheldrüsenkrebs erhielt. Plötzlich war nichts mehr
-                  selbstverständlich. Angst, Zweifel und Ungewissheit wurden
-                  meine Begleiter – aber tief in mir war diese eine Stimme:
-                </p>
-                <p className="mt-6 font-serif text-xl text-gold md:text-3xl">
-                  „Ich gebe nicht auf.“
-                </p>
-                <p className="mt-6 text-text-secondary">
-                  Mein Weg war geprägt von Operationen, Therapien, Hoffnung,
-                  aber auch von Angst, Tränen und vielen Momenten des
-                  Zweifelns. Mut bedeutet nicht, keine Angst zu haben. Mut
-                  bedeutet, trotz der Angst weiterzugehen.
-                </p>
-                <p className="mt-6 text-text-secondary">
-                  Mein Glaube an Gott und die Worte aus Psalm 91 waren eine
-                  wichtige Kraftquelle.
-                </p>
-              </div>
-            </RevealItem>
-          </Chapter>
-
-          <Chapter id="heute" active={activeChapter === "heute"} onActive={setActiveChapter}>
-            <RevealItem>
-              <p className="text-text-secondary">
-                Diese Erfahrung hat meine Sicht auf Gesundheit für immer
-                verändert. Heute ist es meine Herzensaufgabe, Menschen auf
-                ihrem Weg zu mehr Gesundheit, Lebensfreude, innerer Balance und
-                neuen Möglichkeiten zu begleiten. Nicht aus Theorie, sondern
-                aus eigener Erfahrung.
-              </p>
-            </RevealItem>
-          </Chapter>
-
-          <Chapter id="privat" active={activeChapter === "privat"} onActive={setActiveChapter}>
-            <RevealItem>
-              <p className="text-text-secondary">
-                Ich lebe mit meinem Lebenspartner am wunderschönen
-                Sempachersee. Wir sind eine Patchwork-Familie mit vier
-                erwachsenen Kindern. Die Natur ist mein Kraftort – beim
-                Schwimmen im See, auf dem Stand-up-Paddle, beim Joggen oder
-                beim Tennis.
-              </p>
-            </RevealItem>
-          </Chapter>
-          </div>
-        </div>
+        <RevealGroup className="space-y-6" stagger={0.1}>
+          <RevealItem>
+            <p className="font-serif text-xl leading-snug text-gold md:text-2xl">
+              „Meine Geschichte begann mit einer Diagnose. Meine Berufung
+              begann mit der Erkenntnis, dass Gesundheit jeden Tag neu
+              entsteht.“
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Ich bin{" "}
+              <strong className="text-text-primary">Silke Metzinger</strong>{" "}
+              und lebe mit meinem Lebenspartner am wunderschönen Sempachersee.
+              Wir sind eine Patchwork-Familie mit vier erwachsenen Kindern.
+              Die Natur ist mein Kraftort und schenkt mir Ruhe, Energie und
+              den perfekten Ausgleich zu meinem Alltag. Am liebsten bin ich
+              draußen unterwegs – beim Schwimmen im See, auf dem
+              Stand-up-Paddle, beim Joggen oder beim Tennis.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Im Jahr 2019 erhielt ich mit 47 Jahren die Diagnose
+              Bauchspeicheldrüsenkrebs. Von einem Tag auf den anderen wurde
+              mir bewusst, wie kostbar und zugleich zerbrechlich unsere
+              Gesundheit ist. Diese Erfahrung hat mein Leben tief geprägt –
+              aber sie definiert mich nicht. Vielmehr hat sie mir einen neuen
+              Weg gezeigt.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Heute weiß ich: Gesundheit ist weit mehr als die Abwesenheit von
+              Krankheit. Sie entsteht durch die Entscheidungen, die wir
+              täglich treffen – durch eine bewusste Lebensweise, eine
+              ausgewogene Ernährung, Bewegung, mentale Stärke, hochwertige
+              Vitalstoffe und den achtsamen Umgang mit unserem Körper.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Eine besondere Kraftquelle war und ist mein Glaube an Gott. In
+              den herausforderndsten Momenten haben mir das Gebet und die
+              Worte aus Psalm 91 Hoffnung, Frieden und Vertrauen geschenkt.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Aus meiner persönlichen Erfahrung ist eine Herzensaufgabe
+              entstanden: Menschen dafür zu begeistern, ihre Gesundheit
+              bewusst zu stärken – nicht erst dann, wenn Beschwerden
+              auftreten, sondern lange vorher.
+            </p>
+          </RevealItem>
+        </RevealGroup>
       </div>
     </section>
   );

@@ -43,10 +43,10 @@ export default function DatenschutzPage() {
           <p className="mt-3">
             E-Mail:{" "}
             <a
-              href="mailto:info.silke-metzinger@gmx.ch"
+              href="mailto:info@silke-metzinger.ch"
               className="hover:text-sage"
             >
-              info.silke-metzinger@gmx.ch
+              info@silke-metzinger.ch
             </a>
             <br />
             Telefon (Schweiz):{" "}

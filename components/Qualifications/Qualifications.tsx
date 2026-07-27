@@ -1,29 +1,32 @@
 "use client";
 
-import { GraduationCap, HeartHandshake, Leaf, Users } from "lucide-react";
+import { GraduationCap, HeartHandshake, Users } from "lucide-react";
 import { motion } from "motion/react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
-const QUALIFICATIONS = [
+const AUSBILDUNGEN = [
+  "Lizenzierte Ernährungsberaterin",
+  "Lizenzierter Resilienzcoach",
+  "Dreijährige Ausbildung an der Lifeschool Bibelschule",
+];
+
+const BLOCKS = [
   {
-    icon: Leaf,
-    title: "Lizenzierte Ernährungsberaterin",
+    icon: GraduationCap,
+    title: "Ausbildungen & Qualifikationen",
     tilt: "rotate-[-2deg] md:-translate-y-2",
   },
   {
-    icon: HeartHandshake,
-    title: "Lizenzierter Resilienzcoach",
-    tilt: "rotate-[2deg] md:translate-y-6",
-  },
-  {
-    icon: GraduationCap,
-    title: "Dreijährige Ausbildung an der Lifeschool Bibelschule",
-    tilt: "rotate-[-3deg] md:-translate-y-4",
-  },
-  {
     icon: Users,
-    title: "Mehrjährige Tätigkeit im sozialen Bereich",
-    tilt: "rotate-[3deg] md:translate-y-2",
+    title: "Berufliche Erfahrung",
+    text: "Mehrjährige Tätigkeit im sozialen Bereich mit der Begleitung und Unterstützung von Menschen in unterschiedlichen Lebenssituationen.",
+    tilt: "rotate-[2deg] md:translate-y-4",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Mein Ansatz",
+    text: "Ich verbinde fachliches Wissen, persönliche Lebenserfahrung und einen wertschätzenden, christlich geprägten Blick auf den Menschen. Mein Ziel ist es, Menschen dabei zu unterstützen, nachhaltige Veränderungen für Körper, Seele und Geist zu entwickeln.",
+    tilt: "rotate-[-3deg] md:-translate-y-1",
   },
 ];
 
@@ -56,31 +59,43 @@ export default function Qualifications() {
         </Reveal>
 
         <RevealGroup
-          className="mt-16 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-3"
           stagger={0.1}
         >
-          {QUALIFICATIONS.map(({ icon: Icon, title, tilt }, index) => (
+          {BLOCKS.map(({ icon: Icon, title, text, tilt }, index) => (
             <RevealItem key={title}>
               <motion.div
                 whileHover={{ rotate: 0, y: -8 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className={`relative rounded-[28px] border border-gold/25 bg-ivory p-1.5 shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-gold/15 ${tilt}`}
+                className={`relative h-full rounded-[28px] border border-gold/25 bg-ivory p-1.5 shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-gold/15 ${tilt}`}
               >
-                {/* Siegel */}
                 <span className="absolute -top-5 -right-5 z-10 flex h-14 w-14 rotate-[12deg] items-center justify-center rounded-full bg-gold/15 shadow-sm ring-2 ring-gold/50">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-gold/60">
                     <Icon className="h-5 w-5 text-gold" />
                   </span>
                 </span>
 
-                <div className="relative rounded-3xl border border-gold/40 py-8 pl-6 pr-8 shadow-[inset_0_0_40px_rgba(200,169,106,0.10)]">
+                <div className="relative h-full rounded-3xl border border-gold/40 py-8 pl-6 pr-8 shadow-[inset_0_0_40px_rgba(200,169,106,0.10)]">
                   <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-gold/70">
                     Zertifikat Nº {String(index + 1).padStart(2, "0")}
                   </p>
 
-                  <p className="mt-3 hyphens-auto break-words font-script text-xl italic leading-snug text-text-primary md:text-2xl">
+                  <p className="mt-3 font-script text-xl italic leading-snug text-text-primary md:text-2xl">
                     {title}
                   </p>
+
+                  {text ? (
+                    <p className="mt-4 text-sm text-text-secondary">{text}</p>
+                  ) : (
+                    <ul className="mt-4 space-y-2 text-sm text-text-secondary">
+                      {AUSBILDUNGEN.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <svg
                     aria-hidden

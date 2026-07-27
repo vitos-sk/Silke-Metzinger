@@ -34,16 +34,18 @@ export default function ImpressumPage() {
         </section>
 
         <section>
-          <h2 className="font-serif text-lg text-text-primary">Schweiz</h2>
+          <h2 className="font-serif text-lg text-text-primary">
+            Kontakt Schweiz
+          </h2>
           <p className="mt-2">Luzernerstr. 17b</p>
           <p>6204 Hildisrieden</p>
           <p className="mt-2">
             E-Mail:{" "}
             <a
-              href="mailto:info.silke-metzinger@gmx.ch"
+              href="mailto:info@silke-metzinger.ch"
               className="hover:text-sage"
             >
-              info.silke-metzinger@gmx.ch
+              info@silke-metzinger.ch
             </a>
           </p>
           <p>
@@ -58,11 +60,20 @@ export default function ImpressumPage() {
 
         <section>
           <h2 className="font-serif text-lg text-text-primary">
-            Deutschland
+            Kontakt Deutschland
           </h2>
           <p className="mt-2">Falkensteinerstrasse 1</p>
           <p>79369 Wyhl</p>
           <p className="mt-2">
+            E-Mail:{" "}
+            <a
+              href="mailto:info@silke-metzinger.ch"
+              className="hover:text-sage"
+            >
+              info@silke-metzinger.ch
+            </a>
+          </p>
+          <p>
             Telefon:{" "}
             <CopyableNumber
               value="0173 4301477"

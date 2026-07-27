@@ -5,6 +5,7 @@ import { Check, Mail, MessageSquare, Send, User } from "lucide-react";
 import {
   FacebookIcon,
   InstagramIcon,
+  LinkedInIcon,
   WhatsAppIcon,
 } from "@/components/icons/BrandIcons";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
@@ -23,6 +24,11 @@ const SOCIAL_LINKS = [
     label: "Instagram",
     href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
     icon: InstagramIcon,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/in/silke-metzinger",
+    icon: LinkedInIcon,
   },
 ];
 
@@ -271,10 +277,10 @@ export default function Contact() {
                 <li className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-sage" />
                   <a
-                    href="mailto:info.silke-metzinger@gmx.ch"
+                    href="mailto:info@silke-metzinger.ch"
                     className="hover:text-sage"
                   >
-                    info.silke-metzinger@gmx.ch
+                    info@silke-metzinger.ch
                   </a>
                 </li>
               </ul>

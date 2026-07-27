@@ -1,5 +1,9 @@
 import Image from "next/image";
-import { FacebookIcon, InstagramIcon } from "@/components/icons/BrandIcons";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+} from "@/components/icons/BrandIcons";
 import { ASSET_V } from "@/lib/assetVersion";
 
 const LEGAL_LINKS = [
@@ -17,6 +21,11 @@ const SOCIAL_LINKS = [
     label: "Instagram",
     href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
     icon: InstagramIcon,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/in/silke-metzinger",
+    icon: LinkedInIcon,
   },
 ];
 
@@ -57,6 +66,17 @@ export default function Footer() {
               </li>
             ))}
           </ul>
+          <p className="text-sm">
+            Mitglied von:{" "}
+            <a
+              href="https://svnm.online"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-sage"
+            >
+              svnm.online
+            </a>
+          </p>
         </div>
 
         <div className="mt-12 flex flex-col-reverse items-center gap-4 border-t border-sage/15 pt-8 text-xs sm:flex-row sm:justify-between">
