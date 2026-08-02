@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createSubmission } from "@/lib/submissions";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -19,6 +20,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  try {
+    await createSubmission({ type: "contact", firstName, lastName, email, message });
+  } catch (err) {
+    console.error("Kontaktformular: Speichern in Firestore fehlgeschlagen", err);
+    return NextResponse.json(
+      { error: "Etwas ist schiefgelaufen. Bitte versuche es erneut." },
+      { status: 500 },
+    );
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_EMAIL_TO;
 
@@ -26,10 +37,7 @@ export async function POST(request: NextRequest) {
     console.error(
       "Kontaktformular: RESEND_API_KEY oder CONTACT_EMAIL_TO fehlt in .env.local",
     );
-    return NextResponse.json(
-      { error: "Der Versand ist derzeit nicht verfügbar. Bitte versuche es später erneut." },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: true });
   }
 
   const resend = new Resend(apiKey);
@@ -44,10 +52,6 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     console.error("Kontaktformular: Resend-Fehler", error);
-    return NextResponse.json(
-      { error: "Etwas ist schiefgelaufen. Bitte versuche es erneut." },
-      { status: 500 },
-    );
   }
 
   return NextResponse.json({ success: true });

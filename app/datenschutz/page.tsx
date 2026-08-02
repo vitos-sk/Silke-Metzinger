@@ -43,10 +43,10 @@ export default function DatenschutzPage() {
           <p className="mt-3">
             E-Mail:{" "}
             <a
-              href="mailto:info@silke-metzinger.ch"
+              href="mailto:info.silke-metzinger@gmx.ch"
               className="hover:text-sage"
             >
-              info@silke-metzinger.ch
+              info.silke-metzinger@gmx.ch
             </a>
             <br />
             Telefon (Schweiz):{" "}
@@ -163,7 +163,28 @@ export default function DatenschutzPage() {
         </section>
 
         <section>
-          <h2 className="font-serif text-lg text-text-primary">7. Cookies</h2>
+          <h2 className="font-serif text-lg text-text-primary">
+            7. Anmeldung für die „15 Reflexionsfragen“ (Lead-Magnet)
+          </h2>
+          <p className="mt-2">
+            Wenn Sie über das Anmeldeformular die „15 Reflexionsfragen“
+            anfordern, werden Ihre Angaben (Vorname, Nachname, E-Mail-Adresse)
+            zum Zweck der Zusendung dieses Inhalts per E-Mail bei uns
+            gespeichert. Die Verarbeitung erfolgt auf Grundlage Ihrer
+            Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Sie durch Setzen
+            des Häkchens und Absenden des Formulars erteilen. Der Versand
+            erfolgt ebenfalls über den Dienst Resend (Resend, Inc., USA), der
+            als Auftragsverarbeiter für uns tätig wird. Ihre Daten werden
+            gelöscht, sobald die Reflexionsfragen versendet wurden und keine
+            weitere Kommunikation hierzu erforderlich ist, sofern keine
+            gesetzlichen Aufbewahrungspflichten entgegenstehen. Sie können
+            Ihre Einwilligung jederzeit mit Wirkung für die Zukunft per E-Mail
+            an uns widerrufen.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-serif text-lg text-text-primary">8. Cookies</h2>
           <p className="mt-2">
             Auf den öffentlichen Seiten dieser Website werden keine Cookies
             zu Analyse- oder Marketingzwecken eingesetzt. Technisch notwendige
@@ -175,7 +196,7 @@ export default function DatenschutzPage() {
 
         <section>
           <h2 className="font-serif text-lg text-text-primary">
-            8. Schriftarten (Google Fonts)
+            9. Schriftarten (Google Fonts)
           </h2>
           <p className="mt-2">
             Diese Website nutzt zur einheitlichen Darstellung von Schriften
@@ -189,11 +210,11 @@ export default function DatenschutzPage() {
 
         <section>
           <h2 className="font-serif text-lg text-text-primary">
-            9. Social-Media-Links
+            10. Social-Media-Links
           </h2>
           <p className="mt-2">
             Auf dieser Website finden Sie Links zu unseren Profilen bei
-            Facebook und Instagram. Es handelt sich hierbei um einfache
+            Facebook, Instagram und LinkedIn. Es handelt sich hierbei um einfache
             Verweise (Links) auf die jeweiligen Plattformen, nicht um
             eingebundene Social-Plugins. Beim blossen Besuch dieser Website
             werden dadurch keine Daten an die jeweiligen Anbieter übertragen.
@@ -205,7 +226,7 @@ export default function DatenschutzPage() {
 
         <section>
           <h2 className="font-serif text-lg text-text-primary">
-            10. Änderung dieser Datenschutzerklärung
+            11. Änderung dieser Datenschutzerklärung
           </h2>
           <p className="mt-2">
             Wir behalten uns vor, diese Datenschutzerklärung anzupassen,

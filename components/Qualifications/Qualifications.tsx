@@ -1,6 +1,6 @@
 "use client";
 
-import { GraduationCap, HeartHandshake, Users } from "lucide-react";
+import { GraduationCap, Heart, HeartHandshake, Users } from "lucide-react";
 import { motion } from "motion/react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
@@ -21,6 +21,12 @@ const BLOCKS = [
     title: "Berufliche Erfahrung",
     text: "Mehrjährige Tätigkeit im sozialen Bereich mit der Begleitung und Unterstützung von Menschen in unterschiedlichen Lebenssituationen.",
     tilt: "rotate-[2deg] md:translate-y-4",
+  },
+  {
+    icon: Heart,
+    title: "Persönliche Erfahrung",
+    text: "Eigene gesundheitliche Herausforderungen haben meinen Blick auf ganzheitliche Gesundheit, Ernährung und persönliche Entwicklung geprägt. Diese Erfahrungen ermöglichen es mir, Menschen mit Verständnis, Empathie und praxisnahen Impulsen zu begleiten.",
+    tilt: "rotate-[1deg] md:translate-y-2",
   },
   {
     icon: HeartHandshake,
@@ -48,18 +54,19 @@ export default function Qualifications() {
       <div className="relative mx-auto max-w-6xl">
         <Reveal>
           <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
-            Ausbildung &amp; Qualifikationen
+            Meine Qualifikationen &amp; Erfahrungen
           </h2>
         </Reveal>
 
         <Reveal delay={0.05}>
           <p className="mx-auto mt-4 max-w-2xl text-center text-text-secondary">
-            Fundiertes Wissen, echte Erfahrung und eine Ausbildung, die trägt.
+            Ich begleite Menschen auf ihrem Weg zu mehr Gesundheit, Resilienz
+            und innerer Stärke – fachlich fundiert und aus eigener Erfahrung.
           </p>
         </Reveal>
 
         <RevealGroup
-          className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-3"
+          className="mt-16 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-4"
           stagger={0.1}
         >
           {BLOCKS.map(({ icon: Icon, title, text, tilt }, index) => (

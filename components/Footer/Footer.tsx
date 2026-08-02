@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -6,7 +7,8 @@ import {
 } from "@/components/icons/BrandIcons";
 import { ASSET_V } from "@/lib/assetVersion";
 
-const LEGAL_LINKS = [
+const FOOTER_LINKS = [
+  { href: "/blog", label: "Blog" },
   { href: "/impressum", label: "Impressum" },
   { href: "/datenschutz", label: "Datenschutz" },
 ];
@@ -66,27 +68,34 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-          <p className="text-sm">
-            Mitglied von:{" "}
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-sm">Mitglied von:</p>
             <a
               href="https://svnm.online"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-sage"
+              aria-label="SVNM – Schweizerischer Verband Network Marketing"
+              className="inline-block overflow-hidden rounded-xl ring-1 ring-sage/15 transition-opacity duration-300 hover:opacity-80"
             >
-              svnm.online
+              <Image
+                src={`/svnm.png?v=${ASSET_V}`}
+                alt="SVNM – Schweizerischer Verband Network Marketing"
+                width={1536}
+                height={550}
+                className="h-24 w-auto md:h-28"
+              />
             </a>
-          </p>
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col-reverse items-center gap-4 border-t border-sage/15 pt-8 text-xs sm:flex-row sm:justify-between">
           <p>© {year} Silke Metzinger. Alle Rechte vorbehalten.</p>
           <ul className="flex gap-6">
-            {LEGAL_LINKS.map((link) => (
+            {FOOTER_LINKS.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className="hover:text-sage">
+                <Link href={link.href} className="hover:text-sage">
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ScrollProgress from "@/components/motion/ScrollProgress";
 import { ASSET_V } from "@/lib/assetVersion";
 
@@ -10,21 +12,36 @@ const NAV_LINKS = [
   { href: "#ueber-mich", label: "Über mich" },
   { href: "#leistungen", label: "Leistungen" },
   { href: "#news-events", label: "News/Events" },
+  { href: "/blog", label: "Blog" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 
 const SECTION_ORDER = ["home", "ueber-mich", "leistungen", "news-events", "kontakt"];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
+  // Auf Unterseiten (Blog) zeigen die Anker-Links zurück auf die Startseite.
+  const resolveHref = (href: string) => (href.startsWith("#") && !isHome ? `/${href}` : href);
+
+  const isLinkActive = (href: string) => {
+    if (href.startsWith("/")) return pathname.startsWith(href);
+    return isHome && activeSection === href.slice(1);
+  };
+
   const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
     setIsMenuOpen(false);
 
+    // Nur auf der Startseite selbst sanft scrollen; sonst normal navigieren.
+    if (!isHome || !href.startsWith("#")) return;
+
+    e.preventDefault();
     window.setTimeout(() => {
       document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
     }, 300);
@@ -54,6 +71,9 @@ export default function Navbar() {
   const intersectingIds = useRef(new Set<string>());
 
   useEffect(() => {
+    // Die Sections existieren nur auf der Startseite.
+    if (!isHome) return;
+
     const sections = SECTION_ORDER.map((id) => document.getElementById(id)).filter(
       (section): section is HTMLElement => section !== null,
     );
@@ -86,7 +106,7 @@ export default function Navbar() {
     sections.forEach((section) => observer.observe(section));
 
     return () => observer.disconnect();
-  }, []);
+  }, [isHome]);
 
   return (
     <header
@@ -102,7 +122,7 @@ export default function Navbar() {
             isScrolled ? "md:py-2" : "md:py-3"
           }`}
         >
-          <a href="#home" className="flex items-center">
+          <Link href={isHome ? "#home" : "/"} className="flex items-center">
             <Image
               src={`/logo.png?v=${ASSET_V}`}
               alt="Silke Metzinger"
@@ -113,15 +133,15 @@ export default function Navbar() {
                 isScrolled ? "md:h-11" : "md:h-14"
               }`}
             />
-          </a>
+          </Link>
           <div className="hidden items-center gap-8 md:flex">
             <ul className="flex items-center gap-8">
               {NAV_LINKS.map((link) => {
-                const isActive = activeSection === link.href.slice(1);
+                const isActive = isLinkActive(link.href);
                 return (
                   <li key={link.href}>
-                    <a
-                      href={link.href}
+                    <Link
+                      href={resolveHref(link.href)}
                       className={`relative pb-1 text-sm transition-colors ${
                         isActive ? "text-sage" : "text-text-primary hover:text-sage"
                       }`}
@@ -134,17 +154,17 @@ export default function Navbar() {
                             : "scale-x-0 opacity-0"
                         }`}
                       />
-                    </a>
+                    </Link>
                   </li>
                 );
               })}
             </ul>
-            <a
-              href="#kontakt"
+            <Link
+              href={resolveHref("#kontakt")}
               className="inline-block rounded-full bg-sage px-5 py-2 text-sm text-ivory transition-opacity hover:opacity-90"
             >
               Erstgespräch buchen
-            </a>
+            </Link>
           </div>
 
           <button
@@ -179,11 +199,11 @@ export default function Navbar() {
         >
           <ul className="flex flex-col gap-1 px-6 pb-4">
             {NAV_LINKS.map((link) => {
-              const isActive = activeSection === link.href.slice(1);
+              const isActive = isLinkActive(link.href);
               return (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
+                  <Link
+                    href={resolveHref(link.href)}
                     onClick={(e) => handleMobileNavClick(e, link.href)}
                     className={`relative block border-l-2 py-2 pl-3 text-sm transition-colors ${
                       isActive
@@ -192,18 +212,18 @@ export default function Navbar() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               );
             })}
             <li className="pt-2">
-              <a
-                href="#kontakt"
+              <Link
+                href={resolveHref("#kontakt")}
                 onClick={(e) => handleMobileNavClick(e, "#kontakt")}
                 className="inline-block rounded-full bg-sage px-5 py-2 text-sm text-ivory transition-opacity hover:opacity-90"
               >
                 Erstgespräch buchen
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

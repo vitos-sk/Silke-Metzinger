@@ -16,7 +16,7 @@ export default function About() {
           <Reveal direction="right">
             <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl">
               <Image
-                src={`/foto2.png?v=${ASSET_V}`}
+                src={`/foto2.jpg?v=${ASSET_V}`}
                 alt="Silke Metzinger"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -41,9 +41,22 @@ export default function About() {
               und lebe mit meinem Lebenspartner am wunderschönen Sempachersee.
               Wir sind eine Patchwork-Familie mit vier erwachsenen Kindern.
               Die Natur ist mein Kraftort und schenkt mir Ruhe, Energie und
-              den perfekten Ausgleich zu meinem Alltag. Am liebsten bin ich
-              draußen unterwegs – beim Schwimmen im See, auf dem
-              Stand-up-Paddle, beim Joggen oder beim Tennis.
+              den perfekten Ausgleich zu meinem Alltag.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Am liebsten bin ich draußen unterwegs – beim Schwimmen im See,
+              auf dem Stand-up-Paddle, beim Joggen oder beim Tennis. Ich
+              schätze den Austausch mit Menschen, gute Gespräche und
+              gemeinsame Erlebnisse.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Mein Alltag ist lebendig, abwechslungsreich und manchmal auch
+              fordernd. Gerade deshalb sind Auszeiten in der Natur, Bewegung
+              und echte Begegnungen für mich so wertvoll.
             </p>
           </RevealItem>
           <RevealItem>
@@ -67,17 +80,53 @@ export default function About() {
           </RevealItem>
           <RevealItem>
             <p className="text-text-secondary">
+              Ich habe erfahren, wie wertvoll die moderne Schulmedizin ist.
+              Gleichzeitig durfte ich erleben, wie wichtig es ist, den
+              eigenen Körper aktiv zu unterstützen und Verantwortung für die
+              eigene Gesundheit zu übernehmen. Für mich gehören Schulmedizin
+              und Prävention zusammen. Sie ergänzen sich und bilden die
+              Grundlage für ein ganzheitliches Verständnis von Gesundheit.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
               Eine besondere Kraftquelle war und ist mein Glaube an Gott. In
               den herausforderndsten Momenten haben mir das Gebet und die
               Worte aus Psalm 91 Hoffnung, Frieden und Vertrauen geschenkt.
+              Dieses Vertrauen begleitet mich bis heute und erinnert mich
+              daran, dass jeder neue Tag ein Geschenk ist.
             </p>
           </RevealItem>
           <RevealItem>
             <p className="text-text-secondary">
               Aus meiner persönlichen Erfahrung ist eine Herzensaufgabe
-              entstanden: Menschen dafür zu begeistern, ihre Gesundheit
-              bewusst zu stärken – nicht erst dann, wenn Beschwerden
-              auftreten, sondern lange vorher.
+              entstanden: Ich möchte Menschen dafür begeistern, ihre
+              Gesundheit bewusst zu stärken – nicht erst dann, wenn
+              Beschwerden auftreten, sondern lange vorher.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Ich wünsche mir, dass mehr Menschen erkennen, wie viel sie
+              selbst zu ihrem Wohlbefinden beitragen können. Denn Prävention
+              bedeutet für mich nicht Verzicht oder Perfektion. Sie bedeutet,
+              den eigenen Körper wertzuschätzen, Verantwortung zu übernehmen
+              und jeden Tag eine Entscheidung für mehr Lebensqualität zu
+              treffen.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-text-secondary">
+              Mit meinem Wissen, meinen Erfahrungen und meiner Begeisterung
+              für ganzheitliche Gesundheit möchte ich Menschen inspirieren,
+              ihren eigenen Weg zu mehr Vitalität, Energie und Wohlbefinden
+              zu finden – Schritt für Schritt und mit Freude.
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <p className="font-medium text-text-primary">
+              Denn die beste Zeit, etwas für deine Gesundheit zu tun, ist
+              nicht morgen. Sie ist heute.
             </p>
           </RevealItem>
         </RevealGroup>

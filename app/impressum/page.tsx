@@ -42,10 +42,10 @@ export default function ImpressumPage() {
           <p className="mt-2">
             E-Mail:{" "}
             <a
-              href="mailto:info@silke-metzinger.ch"
+              href="mailto:info.silke-metzinger@gmx.ch"
               className="hover:text-sage"
             >
-              info@silke-metzinger.ch
+              info.silke-metzinger@gmx.ch
             </a>
           </p>
           <p>
@@ -67,10 +67,10 @@ export default function ImpressumPage() {
           <p className="mt-2">
             E-Mail:{" "}
             <a
-              href="mailto:info@silke-metzinger.ch"
+              href="mailto:info.silke-metzinger@gmx.ch"
               className="hover:text-sage"
             >
-              info@silke-metzinger.ch
+              info.silke-metzinger@gmx.ch
             </a>
           </p>
           <p>
@@ -80,6 +80,17 @@ export default function ImpressumPage() {
               href="tel:+491734301477"
               label="Telefonnummer Deutschland"
             />
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-serif text-lg text-text-primary">
+            Streitschlichtung
+          </h2>
+          <p className="mt-2">
+            Ich bin nicht bereit und nicht verpflichtet, an
+            Streitbeilegungsverfahren vor einer
+            Verbraucherschlichtungsstelle teilzunehmen.
           </p>
         </section>
 

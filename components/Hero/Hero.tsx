@@ -68,7 +68,7 @@ export default function Hero() {
             className="h-full w-full object-cover"
           />
         </div>
-        <p className="mt-5 text-center font-serif text-lg text-text-secondary italic md:text-xl">
+        <p className="mt-5 text-center font-serif text-lg text-gold italic md:text-xl">
           „Ich plane in Optimismus und rechne mit Überraschungen“
         </p>
       </motion.div>

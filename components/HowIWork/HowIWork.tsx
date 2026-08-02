@@ -44,40 +44,41 @@ export default function HowIWork() {
         <div className="mx-auto mt-8 max-w-3xl space-y-4 text-center text-text-secondary">
           <Reveal delay={0.05}>
             <p>
-              Gesundheit ist so individuell wie der Mensch selbst. Deshalb
-              glaube ich nicht an Standardlösungen, sondern an eine
-              persönliche Begleitung, die dich dort abholt, wo du gerade
-              stehst.
+              Gesundheit ist so individuell wie der Mensch selbst. Deshalb glaube ich
+              nicht an Standardlösungen, sondern an eine persönliche Begleitung, die dich
+              dort abholt, wo du gerade stehst.
             </p>
           </Reveal>
           <Reveal delay={0.1}>
             <p>
-              Ich verbinde fundiertes Wissen über Mikronährstoffe mit meiner
-              eigenen Erfahrung und einem ganzheitlichen Blick auf deine
-              Bedürfnisse. Dabei steht nicht ein Produkt im Mittelpunkt –
-              sondern du.
+              Ich verbinde fundiertes Wissen über Mikronährstoffe mit meiner eigenen
+              Erfahrung und einem ganzheitlichen Blick auf deine Bedürfnisse. Dabei steht
+              nicht ein Produkt im Mittelpunkt – sondern du.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
             <p>
-              Ich persönlich nutze die Vitalstoffe von Lifeplus. Hier der Link
-              zu meinem Online-Shop:{" "}
+              Ich empfehle nur Produkte, die ich selbst kenne und schätze — aus eigener
+              Erfahrung.
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p>
+              Natürliche Vitalstoffe · Sorgfältig ausgewählt · Aus eigener Erfahrung.
+              Direkt vom Hersteller – sicher &amp; einfach bestellt:{" "}
               <a
                 href="https://www.lifeplus.com/SHGL5B/S/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-sage underline underline-offset-2 hover:text-sage/80"
               >
-                LifePlus
+                LifePlus Online-Shop
               </a>
             </p>
           </Reveal>
         </div>
 
-        <RevealGroup
-          className="mx-auto mt-16 max-w-2xl"
-          stagger={0.15}
-        >
+        <RevealGroup className="mx-auto mt-16 max-w-2xl" stagger={0.15}>
           {STEPS.map(({ icon: Icon, title, text }, index) => {
             const isLast = index === STEPS.length - 1;
             return (
@@ -99,9 +100,7 @@ export default function HowIWork() {
                     <p className="font-serif text-sm uppercase tracking-[0.25em] text-gold">
                       {index + 1}. {title}
                     </p>
-                    <p className="mt-3 max-w-lg text-lg text-text-secondary">
-                      {text}
-                    </p>
+                    <p className="mt-3 max-w-lg text-lg text-text-secondary">{text}</p>
                   </div>
                 </div>
               </RevealItem>

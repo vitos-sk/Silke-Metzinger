@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createSubmission } from "@/lib/submissions";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -19,15 +20,22 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  try {
+    await createSubmission({ type: "lead-magnet", fullName, email });
+  } catch (err) {
+    console.error("Lead-Magnet: Speichern in Firestore fehlgeschlagen", err);
+    return NextResponse.json(
+      { error: "Etwas ist schiefgelaufen. Bitte versuche es erneut." },
+      { status: 500 },
+    );
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.LEAD_MAGNET_EMAIL_TO ?? "info@silke-metzinger.ch";
+  const to = process.env.LEAD_MAGNET_EMAIL_TO ?? "info.silke-metzinger@gmx.ch";
 
   if (!apiKey) {
     console.error("Lead-Magnet: RESEND_API_KEY fehlt in .env.local");
-    return NextResponse.json(
-      { error: "Der Versand ist derzeit nicht verfügbar. Bitte versuche es später erneut." },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: true });
   }
 
   const resend = new Resend(apiKey);
@@ -42,10 +50,6 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     console.error("Lead-Magnet: Resend-Fehler", error);
-    return NextResponse.json(
-      { error: "Etwas ist schiefgelaufen. Bitte versuche es erneut." },
-      { status: 500 },
-    );
   }
 
   return NextResponse.json({ success: true });

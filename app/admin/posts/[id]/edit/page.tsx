@@ -1,18 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getEvent } from "@/lib/events";
-import EventForm from "@/app/admin/EventForm";
+import { getPost } from "@/lib/posts";
+import PostForm from "@/app/admin/PostForm";
 
-interface EditEventPageProps {
+interface EditPostPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function EditEventPage({ params }: EditEventPageProps) {
+export default async function EditPostPage({ params }: EditPostPageProps) {
   const { id } = await params;
-  const event = await getEvent(id);
+  const post = await getPost(id);
 
-  if (!event) notFound();
+  if (!post) notFound();
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 sm:py-10">
@@ -24,8 +24,8 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
           <ArrowLeft className="h-4 w-4" strokeWidth={1.75} />
           Zurück
         </Link>
-        <h1 className="mt-3 font-serif text-2xl text-text-primary">Event bearbeiten</h1>
-        <EventForm initialEvent={event} />
+        <h1 className="mt-3 font-serif text-2xl text-text-primary">Beitrag bearbeiten</h1>
+        <PostForm initialPost={post} />
       </div>
     </main>
   );

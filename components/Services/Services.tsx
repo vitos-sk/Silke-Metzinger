@@ -30,6 +30,12 @@ export default function Services() {
             Dein Weg zu mehr Gesundheit &amp; Energie
           </h2>
         </Reveal>
+        <Reveal delay={0.05}>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-text-secondary">
+            Gemeinsam schauen wir darauf, was deinem Körper gut tut und wie du
+            deine Gesundheit ganzheitlich stärken kannst:
+          </p>
+        </Reveal>
         <div className="mt-14 grid gap-12 md:grid-cols-2">
           <div>
             <Reveal>
@@ -51,8 +57,14 @@ export default function Services() {
           <div>
             <Reveal>
               <h3 className="font-serif text-xl text-text-primary">
-                Persönliche Entwicklung
+                Dein Weg in ein selbstbestimmtes Leben
               </h3>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <p className="mt-4 text-text-secondary">
+                Entdecke die Chance, Gesundheit, finanzielle Freiheit und
+                Gemeinschaft neu zu definieren. Gemeinsam stärken wir:
+              </p>
             </Reveal>
             <RevealGroup className="mt-6 space-y-4" stagger={0.08}>
               {MIND_ITEMS.map((item) => (
@@ -66,6 +78,14 @@ export default function Services() {
             </RevealGroup>
           </div>
         </div>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-14 max-w-3xl text-center text-text-secondary">
+            Denn ich bin überzeugt: Alles, was du für ein erfülltes Leben
+            brauchst, trägst du bereits in dir. Manchmal braucht es nur einen
+            Menschen, der an deiner Seite ist, Impulse gibt und dich darin
+            bestärkt, deiner eigenen Kraft wieder zu vertrauen.
+          </p>
+        </Reveal>
       </div>
     </section>
   );

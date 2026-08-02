@@ -1,12 +1,17 @@
 import type { NextConfig } from "next";
-import { ASSET_V } from "./lib/assetVersion";
 
 const nextConfig: NextConfig = {
   images: {
-    // Erlaubt Query-Strings (z. B. ?v=2) auf lokalen /public-Bildern,
+    // Erlaubt Query-Strings (z. B. ?v=5) auf lokalen /public-Bildern,
     // die wir fuers Cache-Busting an die Foto-URLs anhaengen.
-    // "search" muss exakt matchen, daher an ASSET_V gekoppelt.
-    localPatterns: [{ pathname: "/**", search: `?v=${ASSET_V}` }],
+    // Ohne "search" ist jeder Query-String erlaubt. Frueher war "search" exakt
+    // an ASSET_V gekoppelt – dann brach jede ASSET_V-Aenderung den Dev-Server,
+    // weil Next Aenderungen in Config-Imports nicht neu einliest.
+    localPatterns: [{ pathname: "/**" }],
+    // Blog-Bilder liegen im Vercel Blob Storage.
+    remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+    ],
   },
 };
 

@@ -239,7 +239,7 @@ export default function Contact() {
               <img
                 src={`/silke-photo-contact.jpg?v=${ASSET_V}`}
                 alt="Silke Metzinger – Ernährungsberaterin & Coach"
-                className="h-36 w-36 rounded-full object-cover ring-4 ring-gold md:h-54 md:w-54"
+                className="h-36 w-36 rounded-full object-cover md:h-54 md:w-54"
               />
               <div>
                 <p className="font-serif text-xl text-text-primary md:text-2xl">
@@ -252,7 +252,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <h3 className="font-serif text-lg text-text-primary">Direktkontakt</h3>
+              <h3 className="font-serif text-lg text-text-primary">Direkter Kontakt</h3>
               <ul className="mt-4 space-y-3 text-text-secondary">
                 <li className="flex items-start gap-3 sm:items-center">
                   <WhatsAppIcon className="mt-0.5 h-5 w-5 shrink-0 text-sage sm:mt-0" />
@@ -277,17 +277,19 @@ export default function Contact() {
                 <li className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-sage" />
                   <a
-                    href="mailto:info@silke-metzinger.ch"
+                    href="mailto:info.silke-metzinger@gmx.ch"
                     className="hover:text-sage"
                   >
-                    info@silke-metzinger.ch
+                    info.silke-metzinger@gmx.ch
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-serif text-lg text-text-primary">Social Media</h3>
+              <h3 className="font-serif text-lg text-text-primary">
+                Folge mir gerne auf Social Media
+              </h3>
               <ul className="mt-4 flex gap-3">
                 {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
                   <li key={label}>

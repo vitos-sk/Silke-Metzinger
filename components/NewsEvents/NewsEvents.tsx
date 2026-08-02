@@ -1,23 +1,12 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
-import { listEvents } from "@/lib/events";
-import EventCard from "./EventCard";
-
-function SectionDivider({ position }: { position: "top" | "bottom" }) {
-  return (
-    <div
-      aria-hidden
-      className={`pointer-events-none absolute inset-x-0 ${
-        position === "top" ? "top-0" : "bottom-0"
-      } flex items-center justify-center`}
-    >
-      <div className="h-px w-full bg-linear-to-r from-transparent via-gold/35 to-transparent" />
-      <span className="absolute h-1.5 w-1.5 rotate-45 bg-gold/50" />
-    </div>
-  );
-}
+import PostCard from "@/components/Blog/PostCard";
+import { SectionDivider } from "@/components/Blog/decor";
+import { listLatestPosts } from "@/lib/posts";
 
 export default async function NewsEvents() {
-  const events = await listEvents();
+  const posts = await listLatestPosts(3);
 
   return (
     <section id="news-events" className="relative scroll-mt-32 bg-sage/5 px-6 py-16 md:py-20">
@@ -31,7 +20,7 @@ export default async function NewsEvents() {
           </h2>
         </Reveal>
 
-        {events.length === 0 ? (
+        {posts.length === 0 ? (
           <p className="mt-10 text-center text-text-secondary">
             Aktuell sind keine Events geplant &mdash; schau bald wieder vorbei.
           </p>
@@ -40,13 +29,33 @@ export default async function NewsEvents() {
             className="mt-10 grid gap-5 sm:grid-cols-2 md:mt-14 md:grid-cols-3 md:gap-6"
             stagger={0.12}
           >
-            {events.map((event, index) => (
-              <RevealItem key={event.id}>
-                <EventCard event={event} index={index} />
+            {posts.map((post, index) => (
+              <RevealItem key={post.id}>
+                <PostCard post={post} index={index} />
               </RevealItem>
             ))}
           </RevealGroup>
         )}
+
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex justify-center md:mt-12">
+            <Link
+              href="/blog"
+              className="group relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-full bg-sage px-8 text-sm font-medium text-ivory shadow-[0_8px_24px_-6px_rgba(143,175,138,0.55)] ring-1 ring-sage/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-6px_rgba(143,175,138,0.65)] sm:text-base"
+            >
+              <span
+                aria-hidden
+                className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-ivory/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              />
+              <span className="relative">Zum Blog</span>
+              <ArrowRight
+                aria-hidden
+                className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+                strokeWidth={2.25}
+              />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
