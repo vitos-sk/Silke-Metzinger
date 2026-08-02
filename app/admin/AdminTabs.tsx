@@ -50,7 +50,7 @@ export default function AdminTabs({
           }`}
         >
           <CalendarDays className="h-4 w-4" strokeWidth={1.75} />
-          Beiträge
+          Blog
         </button>
       </div>
 

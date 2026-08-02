@@ -70,20 +70,20 @@ export default function Footer() {
           </ul>
           <div className="flex flex-col items-center gap-3">
             <p className="text-sm">Mitglied von:</p>
+            <Image
+              src={`/svnm.png?v=${ASSET_V}`}
+              alt="SVNM – Schweizerischer Verband Network Marketing"
+              width={1536}
+              height={550}
+              className="h-24 w-auto md:h-28"
+            />
             <a
               href="https://svnm.online"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="SVNM – Schweizerischer Verband Network Marketing"
-              className="inline-block overflow-hidden rounded-xl ring-1 ring-sage/15 transition-opacity duration-300 hover:opacity-80"
+              className="text-sm underline underline-offset-4 hover:text-sage"
             >
-              <Image
-                src={`/svnm.png?v=${ASSET_V}`}
-                alt="SVNM – Schweizerischer Verband Network Marketing"
-                width={1536}
-                height={550}
-                className="h-24 w-auto md:h-28"
-              />
+              svnm.online
             </a>
           </div>
         </div>
