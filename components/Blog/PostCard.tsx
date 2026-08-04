@@ -1,40 +1,44 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
-import { CalendarDays, Leaf, MapPin, Sparkles } from "lucide-react";
-import type { Post } from "@/types/post";
-import { formatEventDate } from "@/lib/postDate";
+import { ArrowRight, CalendarDays, Clock, MapPin, Sparkles } from "lucide-react";
+import { POST_TYPE_LABELS, type Post } from "@/types/post";
+import { readingTimeMinutes } from "@/lib/postContent";
+import { formatEventDate, formatTimestamp } from "@/lib/postDate";
 import { HandDrawnFrame, WavyUnderline } from "./decor";
 
-const CARD_TINTS = ["bg-gold/6", "bg-sage/6", "bg-gold/6"];
+/**
+ * Vorschaukarte eines Beitrags.
+ *
+ * Bewusst eine reine Server-Komponente ohne JS-Gesten: die ganze Karte ist ein
+ * einziger Link. Frühere Hover-Animationen liefen über Motion und liessen auf
+ * Touch-Geräten den ersten Tipper als "Hover" verpuffen, statt zu öffnen.
+ * Hover/Fokus laufen jetzt über CSS — Tailwind wendet `hover:` nur auf Geräten
+ * mit echtem Zeiger an, Touch bleibt davon unberührt.
+ */
 
-function EventMeta({ post }: { post: Post }) {
-  if (post.type !== "event") return null;
+const CARD_TINTS = ["from-gold/12", "from-sage/12", "from-gold/12"];
+
+function MetaChip({
+  icon: Icon,
+  children,
+  tone = "muted",
+}: {
+  icon?: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  children: React.ReactNode;
+  tone?: "muted" | "sage" | "past";
+}) {
+  const tones = {
+    muted: "bg-ivory/90 text-text-secondary ring-1 ring-black/5",
+    sage: "bg-sage text-ivory",
+    past: "bg-black/10 text-text-secondary",
+  } as const;
 
   return (
-    <>
-      {post.eventDate && (
-        <span className="inline-flex items-center gap-1 rounded-full bg-sage px-3 py-1 text-xs text-ivory">
-          <CalendarDays className="h-3 w-3" strokeWidth={1.75} />
-          {formatEventDate(post.eventDate)}
-        </span>
-      )}
-      {post.eventLocation && (
-        <span className="inline-flex items-center gap-1 rounded-full bg-ivory/90 px-3 py-1 text-xs text-text-secondary ring-1 ring-black/5">
-          <MapPin className="h-3 w-3" strokeWidth={1.75} />
-          {post.eventLocation}
-        </span>
-      )}
-    </>
-  );
-}
-
-function PastBadge() {
-  return (
-    <span className="inline-flex items-center rounded-full bg-black/10 px-3 py-1 text-xs text-text-secondary">
-      Vergangen
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${tones[tone]}`}
+    >
+      {Icon && <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />}
+      {children}
     </span>
   );
 }
@@ -48,79 +52,104 @@ export default function PostCard({
   index: number;
   isPast?: boolean;
 }) {
-  const hasPhoto = Boolean(post.coverImageUrl);
-  const readMoreLabel = post.type === "event" ? "Zum Event →" : "Weiterlesen →";
+  const minutes = readingTimeMinutes(post.blocks);
+  const isEvent = post.type === "event";
+  const readMoreLabel = isEvent ? "Zum Event" : "Weiterlesen";
+  const tint = CARD_TINTS[index % CARD_TINTS.length];
 
   return (
-    <motion.article
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`h-full overflow-hidden rounded-[20px] shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-sage/10 ${
-        CARD_TINTS[index % CARD_TINTS.length]
-      }`}
-    >
+    <article className="h-full">
       <Link
         href={`/blog/${post.slug}`}
         aria-label={`${post.title} — Beitrag öffnen`}
-        className="flex h-full flex-col rounded-[20px] outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
+        className="group flex h-full flex-col overflow-hidden rounded-[24px] bg-ivory shadow-[0_2px_10px_-4px_rgba(44,44,44,0.12)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-300 outline-none hover:-translate-y-1 hover:shadow-[0_18px_36px_-16px_rgba(143,175,138,0.55)] focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 focus-visible:ring-offset-ivory"
       >
-        {hasPhoto ? (
-          <>
-            <div className="relative aspect-16/10 w-full overflow-hidden bg-linear-to-br from-gold/20 to-sage/20">
-              <Image
-                src={post.coverImageUrl!}
-                alt={post.coverImageAlt || post.title}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                className="object-cover"
-              />
-              <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-                <EventMeta post={post} />
-                {isPast && <PastBadge />}
-              </div>
-              <Leaf
-                aria-hidden
-                className="absolute right-3 top-3 h-4 w-4 rotate-12 text-gold/60"
-                strokeWidth={1.5}
-              />
-            </div>
-
-            <div className="flex flex-1 flex-col p-4 md:p-5">
-              <h3 className="font-serif text-base text-text-primary md:text-lg">{post.title}</h3>
-              <WavyUnderline className="mt-1.5 h-2.5 w-14 text-sage/40" />
-              <p className="mt-2 line-clamp-3 text-sm text-text-secondary">{post.excerpt}</p>
-              <span className="mt-3 inline-block text-sm text-sage">{readMoreLabel}</span>
-            </div>
-          </>
-        ) : (
-          <div className="relative flex h-full min-h-70 flex-col items-center justify-center px-6 py-9 text-center md:px-8">
-            <HandDrawnFrame mirrored={index % 2 === 1} />
-            <Leaf
-              aria-hidden
-              className="absolute right-4 top-4 h-4 w-4 rotate-12 text-gold/60"
-              strokeWidth={1.5}
+        {/* Bildbereich — auch ohne Foto vorhanden, damit alle Karten im Raster
+            gleich hoch beginnen und die Reihe ruhig wirkt. */}
+        <div
+          className={`relative aspect-3/2 w-full overflow-hidden bg-linear-to-br ${tint} to-sage/12`}
+        >
+          {post.coverImageUrl ? (
+            <Image
+              src={post.coverImageUrl}
+              alt={post.coverImageAlt || post.title}
+              fill
+              quality={90}
+              sizes="(min-width: 1280px) 400px, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             />
+          ) : (
+            <>
+              <HandDrawnFrame mirrored={index % 2 === 1} />
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gold/15 text-gold">
+                  <Sparkles className="h-6 w-6" strokeWidth={1.5} />
+                </span>
+              </span>
+            </>
+          )}
 
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-gold/15 text-gold">
-              <Sparkles className="h-4 w-4" strokeWidth={1.75} />
+          {(isEvent || isPast) && (
+            <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1.5">
+              {isEvent && post.eventDate && (
+                <MetaChip icon={CalendarDays} tone="sage">
+                  {formatEventDate(post.eventDate)}
+                  {post.eventTime ? ` · ${post.eventTime}` : ""}
+                </MetaChip>
+              )}
+              {isPast && <MetaChip tone="past">Vergangen</MetaChip>}
             </div>
+          )}
+        </div>
 
-            <div className="relative mt-3 flex flex-wrap justify-center gap-1.5">
-              <EventMeta post={post} />
-              {isPast && <PastBadge />}
-            </div>
-
-            <h3 className="relative mt-3 font-serif text-lg text-text-primary md:text-xl">
-              {post.title}
-            </h3>
-            <WavyUnderline className="relative mt-2 h-2.5 w-14 text-sage/40" />
-            <p className="relative mt-3 line-clamp-3 text-sm text-text-secondary">
-              {post.excerpt}
-            </p>
-            <span className="relative mt-4 inline-block text-sm text-sage">{readMoreLabel}</span>
+        <div className="flex flex-1 flex-col p-5 md:p-6">
+          {/* Kopfzeile mit Einordnung: Art des Beitrags, Datum, Lesezeit. */}
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-text-secondary">
+            <span className="font-medium tracking-wide text-sage uppercase">
+              {POST_TYPE_LABELS[post.type]}
+            </span>
+            <span aria-hidden className="text-text-secondary/40">
+              ·
+            </span>
+            <time dateTime={new Date(post.publishedAt).toISOString()}>
+              {formatTimestamp(post.publishedAt)}
+            </time>
+            <span aria-hidden className="text-text-secondary/40">
+              ·
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+              ca. {minutes} Min.
+            </span>
           </div>
-        )}
+
+          <h3 className="mt-3 font-serif text-xl leading-snug text-text-primary md:text-2xl">
+            {post.title}
+          </h3>
+          <WavyUnderline className="mt-2 h-2.5 w-16 text-sage/40" />
+
+          <p className="mt-3 line-clamp-4 text-[15px] leading-relaxed text-text-secondary">
+            {post.excerpt}
+          </p>
+
+          {isEvent && post.eventLocation && (
+            <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-text-primary">
+              <MapPin className="h-4 w-4 shrink-0 text-sage" strokeWidth={1.75} aria-hidden />
+              {post.eventLocation}
+            </p>
+          )}
+
+          {/* mt-auto hält den Abschluss immer am unteren Kartenrand. */}
+          <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-sage">
+            {readMoreLabel}
+            <ArrowRight
+              aria-hidden
+              className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+              strokeWidth={2}
+            />
+          </span>
+        </div>
       </Link>
-    </motion.article>
+    </article>
   );
 }

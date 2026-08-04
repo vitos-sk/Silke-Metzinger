@@ -1,14 +1,17 @@
 "use client";
 
-import { motion, type Variants } from "motion/react";
-import type { ReactNode } from "react";
+import { motion, useInView, type Variants } from "motion/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type Direction = "up" | "left" | "right" | "none";
 
+// Der horizontale Versatz bleibt <= dem Seitenrand (px-6 = 24px), damit die
+// Elemente während der Animation nicht über den Viewport hinausragen und so
+// keinen horizontalen Scrollbereich erzeugen.
 const OFFSETS: Record<Direction, { x?: number; y?: number }> = {
   up: { y: 32 },
-  left: { x: -32 },
-  right: { x: 32 },
+  left: { x: -24 },
+  right: { x: 24 },
   none: {},
 };
 
@@ -25,6 +28,43 @@ function buildVariants(direction: Direction): Variants {
   };
 }
 
+/**
+ * Auslöser für die Einblend-Animation.
+ *
+ * Der Inhalt startet unsichtbar — deshalb darf das Aufdecken nie ausfallen.
+ * `useInView` allein genügt dafür nicht: liegt ein Element beim Laden bereits
+ * im sichtbaren Bereich, meldet der IntersectionObserver je nach Situation
+ * (Hintergrund-Tab, wiederhergestellte Sitzung, In-App-Browser) nichts — der
+ * Block bliebe dann dauerhaft leer. Darum prüfen wir nach dem Mounten
+ * zusätzlich selbst, ob das Element im sichtbaren Bereich liegt.
+ */
+function useRevealed<T extends HTMLElement>(amount: number) {
+  const ref = useRef<T>(null);
+  const inView = useInView(ref, { once: true, amount });
+  const [visibleOnScreen, setVisibleOnScreen] = useState(false);
+
+  useEffect(() => {
+    let done = false;
+
+    function check() {
+      const element = ref.current;
+      if (done || !element) return;
+      const rect = element.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        done = true;
+        setVisibleOnScreen(true);
+      }
+    }
+
+    check();
+    // Zweiter Blick, sobald Bilder und Schriften die Höhen final gesetzt haben.
+    const timer = window.setTimeout(check, 700);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return { ref, revealed: inView || visibleOnScreen };
+}
+
 export function Reveal({
   children,
   direction = "up",
@@ -39,12 +79,14 @@ export function Reveal({
   as?: "div" | "span";
 }) {
   const Component = motion[as];
+  const { ref, revealed } = useRevealed<HTMLDivElement>(0.3);
+
   return (
     <Component
+      ref={ref}
       className={className}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      animate={revealed ? "visible" : "hidden"}
       variants={buildVariants(direction)}
       transition={{ delay }}
     >
@@ -62,12 +104,16 @@ export function RevealGroup({
   className?: string;
   stagger?: number;
 }) {
+  const { ref, revealed } = useRevealed<HTMLDivElement>(0.2);
+
   return (
     <motion.div
+      ref={ref}
       className={className}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
+      // Die Variante wird an die RevealItem-Kinder weitergereicht; dadurch
+      // blenden sie nacheinander ein.
+      animate={revealed ? "visible" : "hidden"}
       variants={{
         hidden: {},
         visible: { transition: { staggerChildren: stagger } },

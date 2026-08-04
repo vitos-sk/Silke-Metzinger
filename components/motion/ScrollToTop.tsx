@@ -17,11 +17,9 @@ export default function ScrollToTop() {
       {visible && (
         <motion.button
           type="button"
-          onClick={() =>
-            document
-              .getElementById("home")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
+          // Nicht auf #home zielen: die Sektion gibt es nur auf der Startseite,
+          // im Blog blieb der Knopf dadurch wirkungslos.
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Nach oben scrollen"
           initial={{ opacity: 0, y: 16, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

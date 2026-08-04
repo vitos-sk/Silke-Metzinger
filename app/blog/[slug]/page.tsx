@@ -180,7 +180,7 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
               </Reveal>
 
               <RevealGroup
-                className="mt-8 grid gap-5 sm:grid-cols-2 md:mt-10 md:grid-cols-3 md:gap-6"
+                className="mt-8 grid gap-6 sm:grid-cols-2 md:mt-10 md:gap-7 xl:grid-cols-3"
                 stagger={0.1}
               >
                 {related.map((entry, index) => (

@@ -26,7 +26,7 @@ export default async function NewsEvents() {
           </p>
         ) : (
           <RevealGroup
-            className="mt-10 grid gap-5 sm:grid-cols-2 md:mt-14 md:grid-cols-3 md:gap-6"
+            className="mt-10 grid gap-6 sm:grid-cols-2 md:mt-14 md:gap-7 xl:grid-cols-3"
             stagger={0.12}
           >
             {posts.map((post, index) => (

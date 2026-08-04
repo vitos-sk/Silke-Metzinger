@@ -53,6 +53,9 @@ export default function RootLayout({
   return (
     <html
       lang="de"
+      // Next erkennt daran, dass das sanfte Scrollen gewollt ist, und schaltet
+      // es bei Routenwechseln ab — sonst "gleitet" die neue Seite nach oben.
+      data-scroll-behavior="smooth"
       className={`${playfair.variable} ${inter.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-ivory text-text-primary">

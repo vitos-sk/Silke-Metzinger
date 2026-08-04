@@ -16,7 +16,7 @@ export default function About() {
           <Reveal direction="right">
             <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl">
               <Image
-                src={`/foto2.jpg?v=${ASSET_V}`}
+                src={`/foto-balance.jpg?v=${ASSET_V}`}
                 alt="Silke Metzinger"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"

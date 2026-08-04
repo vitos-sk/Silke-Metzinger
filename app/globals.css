@@ -14,6 +14,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Verhindert horizontales Verschieben der Seite (u.a. iOS Safari), wenn
+     Einblend-Animationen kurzzeitig über den Viewport-Rand hinausragen.
+     `clip` statt `hidden`, damit position: sticky weiter funktioniert. */
+  overflow-x: clip;
 }
 
 :root {
