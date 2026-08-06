@@ -16,9 +16,15 @@ export interface LeadMagnetSubmission {
   email: string;
   read: boolean;
   createdAt: number;
+  // Zeitpunkt, an dem die 15 Reflexionsfragen verschickt wurden — null,
+  // solange sie noch offen sind.
+  questionsSentAt: number | null;
 }
 
 export type Submission = ContactSubmission | LeadMagnetSubmission;
 
 export type ContactSubmissionInput = Omit<ContactSubmission, "id" | "read" | "createdAt">;
-export type LeadMagnetSubmissionInput = Omit<LeadMagnetSubmission, "id" | "read" | "createdAt">;
+export type LeadMagnetSubmissionInput = Omit<
+  LeadMagnetSubmission,
+  "id" | "read" | "createdAt" | "questionsSentAt"
+>;

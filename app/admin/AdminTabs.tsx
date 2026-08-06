@@ -1,34 +1,33 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { CalendarDays, Mail } from "lucide-react";
+import { CalendarDays, ListChecks, Mail } from "lucide-react";
 
-type Tab = "mail" | "posts";
+type Tab = "mail" | "posts" | "questions";
 
 export default function AdminTabs({
   mail,
   posts,
+  questions,
   mailUnreadCount,
 }: {
   mail: ReactNode;
   posts: ReactNode;
+  questions: ReactNode;
   mailUnreadCount: number;
 }) {
   const [tab, setTab] = useState<Tab>("posts");
 
+  const tabClass = (id: Tab) =>
+    `flex flex-1 items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-colors ${
+      tab === id ? "bg-sage text-ivory shadow-sm" : "text-text-secondary hover:text-text-primary"
+    }`;
+
   return (
     <div className="mt-6">
       <div className="flex gap-1 rounded-full bg-white/70 p-1 shadow-sm ring-1 ring-black/5 backdrop-blur-xl">
-        <button
-          type="button"
-          onClick={() => setTab("mail")}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
-            tab === "mail"
-              ? "bg-sage text-ivory shadow-sm"
-              : "text-text-secondary hover:text-text-primary"
-          }`}
-        >
-          <Mail className="h-4 w-4" strokeWidth={1.75} />
+        <button type="button" onClick={() => setTab("mail")} className={tabClass("mail")}>
+          <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
           Briefe
           {mailUnreadCount > 0 && (
             <span
@@ -40,21 +39,23 @@ export default function AdminTabs({
             </span>
           )}
         </button>
+        <button type="button" onClick={() => setTab("posts")} className={tabClass("posts")}>
+          <CalendarDays className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+          Blog
+        </button>
         <button
           type="button"
-          onClick={() => setTab("posts")}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${
-            tab === "posts"
-              ? "bg-sage text-ivory shadow-sm"
-              : "text-text-secondary hover:text-text-primary"
-          }`}
+          onClick={() => setTab("questions")}
+          className={tabClass("questions")}
         >
-          <CalendarDays className="h-4 w-4" strokeWidth={1.75} />
-          Blog
+          <ListChecks className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+          Fragen
         </button>
       </div>
 
-      <div className="mt-6">{tab === "mail" ? mail : posts}</div>
+      <div className="mt-6">
+        {tab === "mail" ? mail : tab === "posts" ? posts : questions}
+      </div>
     </div>
   );
 }

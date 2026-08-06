@@ -11,12 +11,15 @@ import {
 } from "lucide-react";
 import { isPastEvent, listPosts } from "@/lib/posts";
 import { listSubmissions } from "@/lib/submissions";
+import { getQuestionnaire } from "@/lib/questionnaire";
 import { formatEventDate, formatTimestampShort } from "@/lib/postDate";
 import { POST_TYPE_LABELS, type Post } from "@/types/post";
 import type { ContactSubmission, LeadMagnetSubmission } from "@/types/submission";
 import LogoutButton from "./LogoutButton";
 import DeletePostButton from "./DeletePostButton";
 import SubmissionActions from "./SubmissionActions";
+import SendQuestionsButton from "./SendQuestionsButton";
+import QuestionnaireForm from "./QuestionnaireForm";
 import AdminTabs from "./AdminTabs";
 
 export const dynamic = "force-dynamic";
@@ -101,7 +104,11 @@ function PostRow({ post }: { post: Post }) {
 }
 
 export default async function AdminPage() {
-  const [posts, submissions] = await Promise.all([listPosts(), listSubmissions()]);
+  const [posts, submissions, questionnaire] = await Promise.all([
+    listPosts(),
+    listSubmissions(),
+    getQuestionnaire(),
+  ]);
   const drafts = posts.filter((post) => post.status === "draft");
   const published = posts.filter((post) => post.status === "published");
 
@@ -198,32 +205,48 @@ export default async function AdminPage() {
           {leadMagnetSubmissions.map((submission) => (
             <div
               key={submission.id}
-              className={`flex items-start gap-4 rounded-2xl p-3.5 shadow-sm ring-1 backdrop-blur-xl sm:p-4 ${
+              className={`rounded-2xl p-3.5 shadow-sm ring-1 backdrop-blur-xl sm:p-4 ${
                 submission.read ? "bg-white/70 ring-black/5" : "bg-white ring-sage/30"
               }`}
             >
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="font-serif text-text-primary">{submission.fullName}</p>
-                  {!submission.read && (
-                    <span className="h-2 w-2 shrink-0 rounded-full bg-gold" aria-hidden />
-                  )}
+              <div className="flex items-start gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-serif text-text-primary">{submission.fullName}</p>
+                    {!submission.read && (
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-gold" aria-hidden />
+                    )}
+                  </div>
+                  <a
+                    href={`mailto:${submission.email}`}
+                    className="text-sm text-sage hover:underline"
+                  >
+                    {submission.email}
+                  </a>
+                  <p className="mt-2 text-xs text-text-secondary/70">
+                    {formatDate(submission.createdAt)}
+                  </p>
                 </div>
-                <a
-                  href={`mailto:${submission.email}`}
-                  className="text-sm text-sage hover:underline"
-                >
-                  {submission.email}
-                </a>
-                <p className="mt-2 text-xs text-text-secondary/70">
-                  {formatDate(submission.createdAt)}
-                </p>
+                <SubmissionActions
+                  id={submission.id}
+                  read={submission.read}
+                  label={submission.fullName}
+                />
               </div>
-              <SubmissionActions
-                id={submission.id}
-                read={submission.read}
-                label={submission.fullName}
-              />
+
+              <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-black/5 pt-3">
+                <SendQuestionsButton
+                  id={submission.id}
+                  name={submission.fullName}
+                  email={submission.email}
+                  sentAt={submission.questionsSentAt}
+                />
+                <span className="text-xs text-text-secondary">
+                  {submission.questionsSentAt
+                    ? `Fragen gesendet am ${formatDate(submission.questionsSentAt)}`
+                    : "Fragen noch nicht gesendet"}
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -298,6 +321,7 @@ export default async function AdminPage() {
         <AdminTabs
           mail={mailContent}
           posts={postsContent}
+          questions={<QuestionnaireForm initial={questionnaire} />}
           mailUnreadCount={unreadContact + unreadLeadMagnet}
         />
       </div>
