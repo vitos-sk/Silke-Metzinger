@@ -4,7 +4,10 @@ import { ArrowLeft } from "lucide-react";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
 
 export const metadata: Metadata = {
-  title: "Datenschutz – Silke Metzinger",
+  title: "Datenschutz",
+  description:
+    "Datenschutzerklärung von Silke Metzinger: Welche Daten auf dieser Website erhoben werden und wie sie verarbeitet werden.",
+  alternates: { canonical: "/datenschutz" },
 };
 
 export default function DatenschutzPage() {

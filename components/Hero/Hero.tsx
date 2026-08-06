@@ -60,7 +60,7 @@ export default function Hero() {
         <div className="aspect-580/783 w-full overflow-hidden rounded-3xl bg-linear-to-br from-sage/20 to-gold/20">
           <Image
             src={`/foto1.jpg?v=${ASSET_V}`}
-            alt="Silke Metzinger"
+            alt="Silke Metzinger, Ernährungsberaterin und Resilienz-Coach"
             width={580}
             height={783}
             priority

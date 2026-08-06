@@ -9,13 +9,20 @@ export default async function NewsEvents() {
   const posts = await listLatestPosts(3);
 
   return (
-    <section id="news-events" className="relative scroll-mt-32 bg-sage/5 px-6 py-16 md:py-20">
+    <section
+      id="news-events"
+      aria-labelledby="news-events-titel"
+      className="relative scroll-mt-32 bg-sage/5 px-6 py-16 md:py-20"
+    >
       <SectionDivider position="top" />
       <SectionDivider position="bottom" />
 
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
+          <h2
+            id="news-events-titel"
+            className="text-center font-serif text-3xl text-text-primary md:text-4xl"
+          >
             News &amp; Events
           </h2>
         </Reveal>

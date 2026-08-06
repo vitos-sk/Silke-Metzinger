@@ -21,19 +21,27 @@ export default function AdminTabs({
   const [tab, setTab] = useState<Tab>("posts");
 
   const tabClass = (id: Tab) =>
-    `flex flex-1 items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-colors ${
+    `flex flex-1 min-w-0 items-center justify-center gap-1.5 rounded-full px-2 py-2.5 text-sm font-medium transition-colors sm:gap-2 sm:px-3 ${
       tab === id ? "bg-sage text-ivory shadow-sm" : "text-text-secondary hover:text-text-primary"
     }`;
+
+  const labelClass = (id: Tab) =>
+    `truncate ${tab === id ? "inline" : "hidden sm:inline"}`;
 
   return (
     <div className="mt-6">
       <div className="flex gap-1 rounded-full bg-white/70 p-1 shadow-sm ring-1 ring-black/5 backdrop-blur-xl">
-        <button type="button" onClick={() => setTab("mail")} className={tabClass("mail")}>
+        <button
+          type="button"
+          onClick={() => setTab("mail")}
+          className={tabClass("mail")}
+          aria-label="Briefe"
+        >
           <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-          Briefe
+          <span className={labelClass("mail")}>Briefe</span>
           {mailUnreadCount > 0 && (
             <span
-              className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${
+              className={`shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium ${
                 tab === "mail" ? "bg-ivory/25 text-ivory" : "bg-gold/20 text-text-primary"
               }`}
             >
@@ -41,21 +49,32 @@ export default function AdminTabs({
             </span>
           )}
         </button>
-        <button type="button" onClick={() => setTab("posts")} className={tabClass("posts")}>
+        <button
+          type="button"
+          onClick={() => setTab("posts")}
+          className={tabClass("posts")}
+          aria-label="Blog"
+        >
           <CalendarDays className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-          Blog
+          <span className={labelClass("posts")}>Blog</span>
         </button>
         <button
           type="button"
           onClick={() => setTab("questions")}
           className={tabClass("questions")}
+          aria-label="Fragen"
         >
           <ListChecks className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-          Fragen
+          <span className={labelClass("questions")}>Fragen</span>
         </button>
-        <button type="button" onClick={() => setTab("account")} className={tabClass("account")}>
+        <button
+          type="button"
+          onClick={() => setTab("account")}
+          className={tabClass("account")}
+          aria-label="Zugang"
+        >
           <KeyRound className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-          Zugang
+          <span className={labelClass("account")}>Zugang</span>
         </button>
       </div>
 

@@ -3,8 +3,14 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
 
+// Bleibt bewusst indexierbar: Name, Adresse und Telefonnummer auf dieser Seite
+// sind für die lokale Suche ein Echtheitssignal.
+// Achtung: Adressen und Nummern hier und in lib/site.ts müssen identisch bleiben.
 export const metadata: Metadata = {
-  title: "Impressum – Silke Metzinger",
+  title: "Impressum",
+  description:
+    "Impressum von Silke Metzinger — Coach, Mentorin und Ernährungsberaterin in Hildisrieden (Schweiz) und Wyhl (Deutschland).",
+  alternates: { canonical: "/impressum" },
 };
 
 export default function ImpressumPage() {

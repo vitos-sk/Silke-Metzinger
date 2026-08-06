@@ -7,18 +7,32 @@ import BlogIndex from "@/components/Blog/BlogIndex";
 import { SectionDivider, WavyUnderline } from "@/components/Blog/decor";
 import { isPastEvent, listPublishedPosts } from "@/lib/posts";
 import { parsePostFilter } from "@/lib/postFilter";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { buildBlogListJsonLd, buildBreadcrumbJsonLd } from "@/lib/structuredData";
 
+const DESCRIPTION =
+  "Impulse, Events und Gedanken rund um Ernährung, Vitalstoffe und einen Alltag mit mehr Energie und Klarheit.";
+
+// Das Vorschaubild erbt diese Seite von app/opengraph-image.tsx.
 export const metadata: Metadata = {
-  title: "Blog — Silke Metzinger",
-  description:
-    "Impulse, Events und Gedanken rund um Ernährung, Vitalstoffe und einen Alltag mit mehr Energie und Klarheit.",
-  alternates: { canonical: "/blog" },
+  title: "Blog",
+  description: DESCRIPTION,
+  alternates: {
+    canonical: "/blog",
+    types: { "application/rss+xml": `${SITE_URL}/blog/feed.xml` },
+  },
   openGraph: {
     title: "Blog — Silke Metzinger",
-    description:
-      "Impulse, Events und Gedanken rund um Ernährung, Vitalstoffe und einen Alltag mit mehr Energie und Klarheit.",
+    description: DESCRIPTION,
     url: "/blog",
+    siteName: SITE_NAME,
+    locale: "de_CH",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog — Silke Metzinger",
+    description: DESCRIPTION,
   },
 };
 
@@ -35,6 +49,15 @@ export default async function BlogPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            buildBreadcrumbJsonLd([{ name: "Blog", path: "/blog" }]),
+            buildBlogListJsonLd(posts),
+          ]),
+        }}
+      />
       <Navbar />
       <main className="pt-(--navbar-h)">
         <section className="relative bg-sage/5 px-6 py-16 md:py-20">

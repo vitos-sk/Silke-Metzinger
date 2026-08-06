@@ -6,6 +6,7 @@ import {
   LinkedInIcon,
 } from "@/components/icons/BrandIcons";
 import { ASSET_V } from "@/lib/assetVersion";
+import { SOCIAL_PROFILES } from "@/lib/site";
 
 const FOOTER_LINKS = [
   { href: "/blog", label: "Blog" },
@@ -13,22 +14,12 @@ const FOOTER_LINKS = [
   { href: "/datenschutz", label: "Datenschutz" },
 ];
 
+// Die Adressen stehen in lib/site.ts, weil die strukturierten Daten (sameAs)
+// dieselben Profile nennen müssen wie der Footer.
 const SOCIAL_LINKS = [
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/share/19LsGR6kfm/?mibextid=wwXIfr",
-    icon: FacebookIcon,
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
-    icon: InstagramIcon,
-  },
-  {
-    label: "LinkedIn",
-    href: "https://linkedin.com/in/silke-metzinger",
-    icon: LinkedInIcon,
-  },
+  { label: "Facebook", href: SOCIAL_PROFILES.facebook, icon: FacebookIcon },
+  { label: "Instagram", href: SOCIAL_PROFILES.instagram, icon: InstagramIcon },
+  { label: "LinkedIn", href: SOCIAL_PROFILES.linkedin, icon: LinkedInIcon },
 ];
 
 export default function Footer() {

@@ -4,9 +4,16 @@ import { ASSET_V } from "@/lib/assetVersion";
 
 export default function About() {
   return (
-    <section id="ueber-mich" className="mx-auto max-w-6xl scroll-mt-32 px-6 py-20">
+    <section
+      id="ueber-mich"
+      aria-labelledby="ueber-mich-titel"
+      className="mx-auto max-w-6xl scroll-mt-32 px-6 py-20"
+    >
       <Reveal>
-        <h2 className="font-serif text-3xl text-text-primary md:text-4xl">
+        <h2
+          id="ueber-mich-titel"
+          className="font-serif text-3xl text-text-primary md:text-4xl"
+        >
           Über mich
         </h2>
       </Reveal>
@@ -17,7 +24,7 @@ export default function About() {
             <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl">
               <Image
                 src={`/foto-balance.jpg?v=${ASSET_V}`}
-                alt="Silke Metzinger"
+                alt="Silke Metzinger in ihrem Element – Balance, Gesundheit und Lebensfreude"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
                 className="object-cover"

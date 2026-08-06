@@ -131,6 +131,7 @@ export default function Contact() {
   return (
     <section
       id="kontakt"
+      aria-labelledby="kontakt-titel"
       className="relative overflow-hidden scroll-mt-32 bg-ivory px-4 py-20 sm:px-6"
     >
       <div
@@ -144,7 +145,10 @@ export default function Contact() {
 
       <div className="relative mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
+          <h2
+            id="kontakt-titel"
+            className="text-center font-serif text-3xl text-text-primary md:text-4xl"
+          >
             Lass uns gemeinsam ins Gespräch kommen
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-center text-text-secondary">

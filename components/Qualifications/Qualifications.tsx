@@ -40,6 +40,7 @@ export default function Qualifications() {
   return (
     <section
       id="qualifikationen"
+      aria-labelledby="qualifikationen-titel"
       className="relative scroll-mt-32 overflow-hidden px-6 py-20"
     >
       <div
@@ -53,7 +54,10 @@ export default function Qualifications() {
 
       <div className="relative mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
+          <h2
+            id="qualifikationen-titel"
+            className="text-center font-serif text-3xl text-text-primary md:text-4xl"
+          >
             Meine Qualifikationen &amp; Erfahrungen
           </h2>
         </Reveal>

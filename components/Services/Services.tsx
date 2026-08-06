@@ -22,11 +22,15 @@ export default function Services() {
   return (
     <section
       id="leistungen"
+      aria-labelledby="leistungen-titel"
       className="scroll-mt-32 overflow-x-hidden bg-ivory px-6 py-20"
     >
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
+          <h2
+            id="leistungen-titel"
+            className="text-center font-serif text-3xl text-text-primary md:text-4xl"
+          >
             Dein Weg zu mehr Gesundheit &amp; Energie
           </h2>
         </Reveal>

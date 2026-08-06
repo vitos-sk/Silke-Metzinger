@@ -12,8 +12,9 @@ import PostCard from "@/components/Blog/PostCard";
 import ShareButtons from "@/components/Blog/ShareButtons";
 import { InlineDivider, SectionDivider } from "@/components/Blog/decor";
 import { getPostBySlug, isPastEvent, listPublishedPosts } from "@/lib/posts";
-import { OG_FALLBACK_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
+import { OG_IMAGE_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/session";
+import { authorPerson, buildBreadcrumbJsonLd } from "@/lib/structuredData";
 import type { Post } from "@/types/post";
 
 interface PostPageProps {
@@ -54,12 +55,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await loadVisiblePost(slug, isPreviewRequest(await searchParams));
 
-  if (!post) return { title: "Beitrag nicht gefunden — Silke Metzinger" };
+  if (!post) return { title: "Beitrag nicht gefunden" };
 
-  const image = post.coverImageUrl ?? OG_FALLBACK_IMAGE;
-
+  // Das Vorschaubild kommt aus opengraph-image.tsx im selben Ordner — deshalb
+  // hier bewusst kein "images": eine eigene Angabe würde die Datei überstimmen.
   return {
-    title: `${post.title} — ${SITE_NAME}`,
+    title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.slug}` },
     robots: post.status === "draft" ? { index: false, follow: false } : undefined,
@@ -68,22 +69,23 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       url: `/blog/${post.slug}`,
+      siteName: SITE_NAME,
       publishedTime: new Date(post.publishedAt).toISOString(),
-      images: [image],
-      locale: "de_DE",
+      modifiedTime: new Date(post.updatedAt || post.publishedAt).toISOString(),
+      authors: [SITE_NAME],
+      locale: "de_CH",
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: [image],
     },
   };
 }
 
 function buildJsonLd(post: Post) {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  const image = post.coverImageUrl ?? `${SITE_URL}${OG_FALLBACK_IMAGE}`;
+  const image = post.coverImageUrl ?? `${SITE_URL}${OG_IMAGE_PATH}`;
 
   if (post.type === "event" && post.eventDate) {
     return {
@@ -97,7 +99,8 @@ function buildJsonLd(post: Post) {
       ...(post.eventLocation
         ? { location: { "@type": "Place", name: post.eventLocation } }
         : {}),
-      organizer: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+      organizer: authorPerson(),
+      inLanguage: "de-CH",
     };
   }
 
@@ -111,7 +114,11 @@ function buildJsonLd(post: Post) {
     mainEntityOfPage: url,
     datePublished: new Date(post.publishedAt).toISOString(),
     dateModified: new Date(post.updatedAt || post.publishedAt).toISOString(),
-    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    inLanguage: "de-CH",
+    // Verweist auf die Person aus den Startseiten-Daten, statt sie zu wiederholen.
+    author: authorPerson(),
+    publisher: authorPerson(),
+    isPartOf: { "@id": `${SITE_URL}/blog#blog` },
   };
 }
 
@@ -135,7 +142,15 @@ export default async function PostPage({ params, searchParams }: PostPageProps) 
       <main className="pt-(--navbar-h)">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(post)) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              buildJsonLd(post),
+              buildBreadcrumbJsonLd([
+                { name: "Blog", path: "/blog" },
+                { name: post.title, path: `/blog/${post.slug}` },
+              ]),
+            ]),
+          }}
         />
 
         <article className="px-6 py-12 md:py-16">

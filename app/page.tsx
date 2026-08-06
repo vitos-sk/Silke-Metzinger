@@ -11,10 +11,15 @@ import CallToAction from "@/components/CallToAction/CallToAction";
 import Contact from "@/components/Contact/Contact";
 import Footer from "@/components/Footer/Footer";
 import ScrollToTop from "@/components/motion/ScrollToTop";
+import { buildHomeJsonLd } from "@/lib/structuredData";
 
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildHomeJsonLd()) }}
+      />
       <Navbar />
       <main className="pt-(--navbar-h)">
         <Hero />

@@ -23,6 +23,7 @@ export default function HowIWork() {
   return (
     <section
       id="wie-ich-arbeite"
+      aria-labelledby="wie-ich-arbeite-titel"
       className="relative scroll-mt-32 overflow-hidden bg-ivory px-6 py-20"
     >
       <div
@@ -36,7 +37,10 @@ export default function HowIWork() {
 
       <div className="relative mx-auto max-w-6xl">
         <Reveal>
-          <h2 className="text-center font-serif text-3xl text-text-primary md:text-4xl">
+          <h2
+            id="wie-ich-arbeite-titel"
+            className="text-center font-serif text-3xl text-text-primary md:text-4xl"
+          >
             Wie ich arbeite
           </h2>
         </Reveal>
