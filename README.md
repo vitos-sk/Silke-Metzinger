@@ -155,7 +155,7 @@ FIREBASE_PROJECT_ID=
 FIREBASE_CLIENT_EMAIL=
 FIREBASE_PRIVATE_KEY=
 
-# Resend (Kontaktformular)
+# Resend (Kontaktformular + Passwort-Reset-Link)
 RESEND_API_KEY=
 CONTACT_EMAIL_TO=
 CONTACT_EMAIL_FROM=

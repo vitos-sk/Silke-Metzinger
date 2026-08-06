@@ -9,6 +9,16 @@ import {
   verifyGateToken,
 } from "@/lib/gate";
 
+// Diese Pfade brauchen keine Session (aber weiterhin einen gültigen Gate-Key),
+// sonst käme man an ein vergessenes Passwort nie heran.
+const PUBLIC_ADMIN_PATHS = new Set([
+  "/admin/login",
+  "/admin/reset-password",
+  "/api/admin/login",
+  "/api/admin/forgot-password",
+  "/api/admin/reset-password",
+]);
+
 function setGateCookie(response: NextResponse, token: string) {
   response.cookies.set(GATE_COOKIE_NAME, token, {
     httpOnly: true,
@@ -41,11 +51,17 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 404 });
   }
 
-  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
-    const response =
-      justGated && pathname === "/admin/login"
-        ? NextResponse.redirect(new URL("/admin/login", request.url))
-        : NextResponse.next();
+  if (PUBLIC_ADMIN_PATHS.has(pathname)) {
+    let response: NextResponse;
+    if (justGated && !pathname.startsWith("/api/")) {
+      // Den Gate-Key aus der Adresszeile entfernen, alle anderen Parameter
+      // (z. B. das Reset-Token) bleiben erhalten.
+      const cleanUrl = request.nextUrl.clone();
+      cleanUrl.searchParams.delete(GATE_QUERY_PARAM);
+      response = NextResponse.redirect(cleanUrl);
+    } else {
+      response = NextResponse.next();
+    }
     if (justGated) {
       setGateCookie(response, await createGateToken());
     }
