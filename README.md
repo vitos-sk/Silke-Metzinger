@@ -140,7 +140,8 @@ npm run lint    # ESLint-Prüfung
 Lege eine `.env.local` mit folgenden Schlüsseln an:
 
 ```bash
-# Zugriff auf /admin
+# Zugriff auf /admin (Erstanlage — danach in der Admin-Oberfläche änderbar)
+ADMIN_EMAIL=
 ADMIN_PASSWORD=
 SESSION_SECRET=
 ADMIN_GATE_KEY=

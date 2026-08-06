@@ -3,11 +3,12 @@
 import { Suspense, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { AlertCircle, Eye, EyeOff, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 
 function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +26,7 @@ function AdminLoginForm() {
       res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
     } catch {
       setLoading(false);
@@ -37,7 +38,7 @@ function AdminLoginForm() {
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      setError(data?.error || "Falsches Passwort.");
+      setError(data?.error || "E-Mail oder Passwort ist falsch.");
       return;
     }
 
@@ -79,7 +80,29 @@ function AdminLoginForm() {
             </p>
           )}
 
-          <label className="mt-6 block text-sm font-medium text-text-primary" htmlFor="password">
+          <label className="mt-6 block text-sm font-medium text-text-primary" htmlFor="email">
+            E-Mail
+          </label>
+          <div className="relative mt-1.5">
+            <Mail
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-text-secondary"
+              strokeWidth={1.75}
+            />
+            <input
+              id="email"
+              type="email"
+              inputMode="email"
+              autoFocus
+              autoComplete="username"
+              autoCapitalize="none"
+              spellCheck={false}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-xl border border-black/10 bg-white py-3.5 pl-10.5 pr-4 text-base text-text-primary outline-none transition-colors focus:border-sage focus:ring-2 focus:ring-sage/20"
+            />
+          </div>
+
+          <label className="mt-4 block text-sm font-medium text-text-primary" htmlFor="password">
             Passwort
           </label>
           <div className="relative mt-1.5">
@@ -90,7 +113,6 @@ function AdminLoginForm() {
             <input
               id="password"
               type={showPassword ? "text" : "password"}
-              autoFocus
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

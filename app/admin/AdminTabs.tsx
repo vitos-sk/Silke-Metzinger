@@ -1,19 +1,21 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { CalendarDays, ListChecks, Mail } from "lucide-react";
+import { CalendarDays, KeyRound, ListChecks, Mail } from "lucide-react";
 
-type Tab = "mail" | "posts" | "questions";
+type Tab = "mail" | "posts" | "questions" | "account";
 
 export default function AdminTabs({
   mail,
   posts,
   questions,
+  account,
   mailUnreadCount,
 }: {
   mail: ReactNode;
   posts: ReactNode;
   questions: ReactNode;
+  account: ReactNode;
   mailUnreadCount: number;
 }) {
   const [tab, setTab] = useState<Tab>("posts");
@@ -51,10 +53,20 @@ export default function AdminTabs({
           <ListChecks className="h-4 w-4 shrink-0" strokeWidth={1.75} />
           Fragen
         </button>
+        <button type="button" onClick={() => setTab("account")} className={tabClass("account")}>
+          <KeyRound className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+          Zugang
+        </button>
       </div>
 
       <div className="mt-6">
-        {tab === "mail" ? mail : tab === "posts" ? posts : questions}
+        {tab === "mail"
+          ? mail
+          : tab === "posts"
+            ? posts
+            : tab === "questions"
+              ? questions
+              : account}
       </div>
     </div>
   );

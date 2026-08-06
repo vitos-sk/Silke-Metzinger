@@ -12,6 +12,7 @@ import {
 import { isPastEvent, listPosts } from "@/lib/posts";
 import { listSubmissions } from "@/lib/submissions";
 import { getQuestionnaire } from "@/lib/questionnaire";
+import { getAdminAccount } from "@/lib/adminAccount";
 import { formatEventDate, formatTimestampShort } from "@/lib/postDate";
 import { POST_TYPE_LABELS, type Post } from "@/types/post";
 import type { ContactSubmission, LeadMagnetSubmission } from "@/types/submission";
@@ -21,6 +22,7 @@ import SubmissionActions from "./SubmissionActions";
 import SendQuestionsButton from "./SendQuestionsButton";
 import QuestionnaireForm from "./QuestionnaireForm";
 import AdminTabs from "./AdminTabs";
+import AccountForm from "./AccountForm";
 
 export const dynamic = "force-dynamic";
 
@@ -104,10 +106,11 @@ function PostRow({ post }: { post: Post }) {
 }
 
 export default async function AdminPage() {
-  const [posts, submissions, questionnaire] = await Promise.all([
+  const [posts, submissions, questionnaire, account] = await Promise.all([
     listPosts(),
     listSubmissions(),
     getQuestionnaire(),
+    getAdminAccount().catch(() => null),
   ]);
   const drafts = posts.filter((post) => post.status === "draft");
   const published = posts.filter((post) => post.status === "published");
@@ -322,6 +325,7 @@ export default async function AdminPage() {
           mail={mailContent}
           posts={postsContent}
           questions={<QuestionnaireForm initial={questionnaire} />}
+          account={<AccountForm initialEmail={account?.email ?? ""} />}
           mailUnreadCount={unreadContact + unreadLeadMagnet}
         />
       </div>

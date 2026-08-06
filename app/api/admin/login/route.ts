@@ -1,5 +1,5 @@
-import { createHash, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
+import { verifyCredentials } from "@/lib/adminAccount";
 import { createSessionToken, SESSION_COOKIE_NAME, SESSION_MAX_AGE } from "@/lib/session";
 
 const MAX_ATTEMPTS = 5;
@@ -37,12 +37,6 @@ function clearAttempts(ip: string) {
   attempts.delete(ip);
 }
 
-function safeComparePassword(provided: string, expected: string): boolean {
-  const a = createHash("sha256").update(provided).digest();
-  const b = createHash("sha256").update(expected).digest();
-  return timingSafeEqual(a, b);
-}
-
 export async function POST(request: Request) {
   const ip = getClientIp(request);
 
@@ -53,15 +47,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const { password } = await request.json();
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const { email, password } = await request.json();
 
-  const ok =
-    typeof password === "string" && !!adminPassword && safeComparePassword(password, adminPassword);
+  let ok = false;
+  if (typeof email === "string" && typeof password === "string" && email && password) {
+    try {
+      ok = await verifyCredentials(email, password);
+    } catch (error) {
+      console.error("Admin-Login fehlgeschlagen:", error);
+      return NextResponse.json(
+        { error: "Anmeldung derzeit nicht möglich. Bitte später erneut versuchen." },
+        { status: 500 },
+      );
+    }
+  }
 
   if (!ok) {
     recordFailedAttempt(ip);
-    return NextResponse.json({ error: "Falsches Passwort" }, { status: 401 });
+    // Bewusst keine Unterscheidung zwischen falscher E-Mail und falschem Passwort.
+    return NextResponse.json({ error: "E-Mail oder Passwort ist falsch" }, { status: 401 });
   }
 
   clearAttempts(ip);

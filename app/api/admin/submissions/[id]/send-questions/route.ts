@@ -36,11 +36,18 @@ export async function POST(_request: Request, { params }: RouteParams) {
   const { subject, text, html } = renderQuestionnaireEmail(questionnaire, submission.fullName);
   const resend = new Resend(apiKey);
 
+  // Testbetrieb: Solange keine eigene Domain bei Resend verifiziert ist, dürfen
+  // nur E-Mails an die eigene Adresse rausgehen. TEST_EMAIL_REDIRECT lenkt den
+  // Versand dorthin um — in Produktion die Variable einfach weglassen.
+  const testRecipient = process.env.TEST_EMAIL_REDIRECT;
+  const recipient = testRecipient || submission.email;
+  const finalSubject = testRecipient ? `[TEST → ${submission.email}] ${subject}` : subject;
+
   const { error } = await resend.emails.send({
     from: process.env.CONTACT_EMAIL_FROM ?? "Website <onboarding@resend.dev>",
-    to: submission.email,
+    to: recipient,
     replyTo: process.env.LEAD_MAGNET_EMAIL_TO ?? "info.silke-metzinger@gmx.ch",
-    subject,
+    subject: finalSubject,
     text,
     html,
   });
