@@ -32,17 +32,19 @@ export default function BlogIndex({
           return post.type === "event" && !post.isPast;
         case "beitraege":
           return post.type !== "event";
-        case "archiv":
-          return post.isPast;
         default:
-          return !post.isPast;
+          return true;
       }
     });
 
-    const needle = query.trim().toLowerCase();
-    if (!needle) return byFilter;
+    // Vergangene Events bleiben sichtbar, rutschen aber ans Ende — die
+    // Reihenfolge innerhalb der beiden Gruppen kommt weiterhin vom Server.
+    const sorted = [...byFilter].sort((a, b) => Number(a.isPast) - Number(b.isPast));
 
-    return byFilter.filter((post) => postSearchText(post).includes(needle));
+    const needle = query.trim().toLowerCase();
+    if (!needle) return sorted;
+
+    return sorted.filter((post) => postSearchText(post).includes(needle));
   }, [posts, activeFilter, query]);
 
   return (

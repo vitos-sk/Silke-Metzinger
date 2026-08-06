@@ -14,7 +14,7 @@ export default function AdminTabs({
   posts: ReactNode;
   mailUnreadCount: number;
 }) {
-  const [tab, setTab] = useState<Tab>("mail");
+  const [tab, setTab] = useState<Tab>("posts");
 
   return (
     <div className="mt-6">
