@@ -1,7 +1,7 @@
 import { getDb } from "@/lib/firebaseAdmin";
 import {
+  MAX_QUESTIONS,
   NAME_PLACEHOLDER,
-  QUESTION_COUNT,
   type Questionnaire,
   type QuestionnaireInput,
 } from "@/types/questionnaire";
@@ -12,26 +12,18 @@ const DOC_ID = "reflexionsfragen";
 // Startvorlage: Silke kann jede Zeile im Admin überschreiben, muss aber nicht
 // bei null anfangen.
 export const DEFAULT_QUESTIONNAIRE: Questionnaire = {
-  subject: "Deine 15 Reflexionsfragen",
+  subject: "Deine Reflexionsfragen",
   intro:
     `Liebe/r ${NAME_PLACEHOLDER},\n\n` +
-    "schön, dass du dir Zeit für dich nimmst. Hier sind deine 15 Reflexionsfragen.\n\n" +
+    "schön, dass du dir Zeit für dich nimmst. Hier sind deine Reflexionsfragen.\n\n" +
     "Nimm dir für jede Frage einen ruhigen Moment und schreibe auf, was dir spontan " +
     "in den Sinn kommt — es gibt kein richtig oder falsch.",
   questions: [
     "Wie fühlt sich mein Körper an, wenn ich morgens aufwache?",
     "Wann hatte ich zuletzt über einen ganzen Tag hinweg richtig viel Energie?",
-    "Welche Mahlzeit am Tag tut mir am meisten gut — und welche weniger?",
     "Wie oft esse ich, weil ich Hunger habe, und wie oft aus Gewohnheit oder Stress?",
-    "Wie viel Wasser trinke ich an einem normalen Tag wirklich?",
-    "Welche Lebensmittel esse ich fast täglich, ohne darüber nachzudenken?",
     "Wie gut schlafe ich — und was beeinflusst meinen Schlaf am stärksten?",
-    "Wo im Alltag spüre ich Anspannung in meinem Körper?",
     "Welche Bewegung macht mir Freude, statt sich nach Pflicht anzufühlen?",
-    "Was tue ich für mich, wenn ein Tag anstrengend war?",
-    "Welche Beschwerden begleiten mich schon so lange, dass ich sie kaum noch bemerke?",
-    "Was habe ich in Sachen Gesundheit schon versucht — und was hat mir gefehlt?",
-    "Wer oder was unterstützt mich auf meinem Weg?",
     "Was möchte ich in drei Monaten anders spüren als heute?",
     "Was ist der eine kleine Schritt, den ich schon morgen gehen könnte?",
   ],
@@ -45,13 +37,16 @@ function toText(value: unknown, fallback: string): string {
   return typeof value === "string" ? value : fallback;
 }
 
-// Immer genau 15 Einträge zurückgeben, damit das Formular und der Versand
-// nicht auf Lücken in alten Dokumenten stolpern.
+// Die Liste ist so lang, wie Silke sie im Admin anlegt. Leere Zeilen fliegen
+// raus, damit questions.length überall die echte Anzahl ist — auf der Website,
+// im Admin und in der E-Mail.
 function normalizeQuestions(value: unknown): string[] {
   const list = Array.isArray(value) ? value : [];
-  return Array.from({ length: QUESTION_COUNT }, (_, index) =>
-    typeof list[index] === "string" ? (list[index] as string) : "",
-  );
+  return list
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, MAX_QUESTIONS);
 }
 
 export function normalizeQuestionnaire(value: unknown): QuestionnaireInput {
@@ -70,8 +65,12 @@ export async function getQuestionnaire(): Promise<Questionnaire> {
   if (!doc.exists) return DEFAULT_QUESTIONNAIRE;
 
   const data = doc.data() ?? {};
+  const stored = normalizeQuestionnaire(data);
   return {
-    ...normalizeQuestionnaire(data),
+    ...stored,
+    // Ein leerer Dokumentstand kann über das Formular nicht entstehen. Falls er
+    // doch einmal auftaucht, ist die Startvorlage besser als eine leere Liste.
+    questions: stored.questions.length > 0 ? stored.questions : DEFAULT_QUESTIONNAIRE.questions,
     updatedAt: typeof data.updatedAt === "number" ? data.updatedAt : 0,
   };
 }

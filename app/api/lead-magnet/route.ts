@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     from: process.env.CONTACT_EMAIL_FROM ?? "Website <onboarding@resend.dev>",
     to,
     replyTo: email,
-    subject: `Neue Anfrage: 15 Reflexionsfragen – ${fullName}`,
-    text: `Name: ${fullName}\nE-Mail: ${email}\n\nAnfrage für: Die 15 Reflexionsfragen`,
+    subject: `Neue Anfrage: Reflexionsfragen – ${fullName}`,
+    text: `Name: ${fullName}\nE-Mail: ${email}\n\nAnfrage für: Die Reflexionsfragen`,
   });
 
   if (error) {

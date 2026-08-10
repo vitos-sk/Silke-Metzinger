@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Loader2, Mail, Save } from "lucide-react";
-import { NAME_PLACEHOLDER, type Questionnaire } from "@/types/questionnaire";
+import { Check, Loader2, Mail, Plus, Save, Trash2 } from "lucide-react";
+import {
+  MAX_QUESTIONS,
+  MIN_QUESTIONS,
+  NAME_PLACEHOLDER,
+  type Questionnaire,
+} from "@/types/questionnaire";
+
+// Zeilen brauchen eine stabile ID: Beim Löschen mitten in der Liste würde ein
+// Index-Key den Inhalt der folgenden Felder verrutschen lassen.
+interface QuestionRow {
+  id: number;
+  text: string;
+}
 
 const fieldClass =
   "mt-1.5 w-full rounded-xl border border-black/10 bg-white px-3.5 py-3 text-base text-text-primary outline-none transition-colors focus:border-sage focus:ring-2 focus:ring-sage/20";
@@ -26,7 +38,14 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
   const router = useRouter();
   const [subject, setSubject] = useState(initial.subject);
   const [intro, setIntro] = useState(initial.intro);
-  const [questions, setQuestions] = useState<string[]>(initial.questions);
+  const [rows, setRows] = useState<QuestionRow[]>(() =>
+    initial.questions.map((text, index) => ({ id: index, text })),
+  );
+  const nextId = useRef(initial.questions.length);
+
+  function makeRows(texts: string[]): QuestionRow[] {
+    return texts.map((text) => ({ id: nextId.current++, text }));
+  }
   const [outro, setOutro] = useState(initial.outro);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(
@@ -35,8 +54,24 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
   const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function updateQuestion(index: number, value: string) {
-    setQuestions((current) => current.map((item, i) => (i === index ? value : item)));
+  function updateQuestion(id: number, value: string) {
+    setRows((current) => current.map((row) => (row.id === id ? { ...row, text: value } : row)));
+    setJustSaved(false);
+  }
+
+  function addQuestion() {
+    setRows((current) =>
+      current.length >= MAX_QUESTIONS
+        ? current
+        : [...current, { id: nextId.current++, text: "" }],
+    );
+    setJustSaved(false);
+  }
+
+  function removeQuestion(id: number) {
+    setRows((current) =>
+      current.length <= MIN_QUESTIONS ? current : current.filter((row) => row.id !== id),
+    );
     setJustSaved(false);
   }
 
@@ -49,7 +84,12 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
       const res = await fetch("/api/admin/questionnaire", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject, intro, questions, outro }),
+        body: JSON.stringify({
+          subject,
+          intro,
+          questions: rows.map((row) => row.text),
+          outro,
+        }),
       });
 
       if (res.status === 401) {
@@ -63,6 +103,11 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
         return;
       }
 
+      // Der Server wirft leere Zeilen weg — das Formular übernimmt danach den
+      // gespeicherten Stand, damit die Anzahl hier und auf der Website gleich ist.
+      if (Array.isArray(data.questions)) {
+        setRows(makeRows(data.questions as string[]));
+      }
       setSavedAt(data.updatedAt ?? Date.now());
       setJustSaved(true);
       router.refresh();
@@ -73,17 +118,17 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
     }
   }
 
-  const filledCount = questions.filter((question) => question.trim()).length;
+  const filledCount = rows.filter((row) => row.text.trim()).length;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-serif text-lg text-text-primary sm:text-xl">
-            15 Reflexionsfragen
+            {filledCount} Reflexionsfragen
           </h2>
           <p className="text-xs text-text-secondary sm:text-sm">
-            {filledCount} von {questions.length} Fragen ausgefüllt
+            {filledCount} von {rows.length} Fragen ausgefüllt
             {savedAt ? ` · zuletzt gespeichert am ${formatDate(savedAt)}` : ""}
           </p>
         </div>
@@ -129,23 +174,52 @@ export default function QuestionnaireForm({ initial }: { initial: Questionnaire 
       <section className={sectionClass}>
         <span className={labelClass}>Die Fragen</span>
         <p className="mt-1 text-xs text-text-secondary">
-          Leere Zeilen werden in der E-Mail einfach weggelassen.
+          Die Anzahl steuerst du hier: Zeilen hinzufügen oder löschen. Genau diese
+          Zahl steht auf der Website („{filledCount} Reflexionsfragen für mehr
+          Klarheit“). Leere Zeilen werden beim Speichern verworfen.
         </p>
         <div className="mt-3 space-y-2.5">
-          {questions.map((question, index) => (
-            <div key={index} className="flex items-start gap-2.5">
+          {rows.map((row, index) => (
+            <div key={row.id} className="flex items-start gap-2.5">
               <span className="mt-3.5 w-6 shrink-0 text-right text-sm text-text-secondary">
                 {index + 1}.
               </span>
               <textarea
-                value={question}
-                onChange={(e) => updateQuestion(index, e.target.value)}
+                value={row.text}
+                onChange={(e) => updateQuestion(row.id, e.target.value)}
                 rows={2}
                 aria-label={`Frage ${index + 1}`}
                 className={`${fieldClass} mt-0 resize-y`}
               />
+              <button
+                type="button"
+                onClick={() => removeQuestion(row.id)}
+                disabled={rows.length <= MIN_QUESTIONS}
+                aria-label={`Frage ${index + 1} löschen`}
+                title="Frage löschen"
+                className="mt-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-text-secondary transition-colors hover:bg-red-50 hover:text-red-600 disabled:pointer-events-none disabled:opacity-30"
+              >
+                <Trash2 className="h-4 w-4" strokeWidth={1.75} />
+              </button>
             </div>
           ))}
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-3 pl-8.5">
+          <button
+            type="button"
+            onClick={addQuestion}
+            disabled={rows.length >= MAX_QUESTIONS}
+            className="flex min-h-10 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-medium text-text-primary shadow-sm ring-1 ring-black/10 transition-colors hover:bg-sage/10 hover:text-sage disabled:pointer-events-none disabled:opacity-40"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} />
+            Frage hinzufügen
+          </button>
+          <span className="text-xs text-text-secondary">
+            {rows.length >= MAX_QUESTIONS
+              ? `Maximal ${MAX_QUESTIONS} Fragen.`
+              : `${rows.length} von maximal ${MAX_QUESTIONS} Fragen`}
+          </span>
         </div>
       </section>
 

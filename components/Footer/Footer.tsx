@@ -38,11 +38,11 @@ export default function Footer() {
             alt="Silke Metzinger"
             width={949}
             height={312}
-            className="h-11 w-auto"
+            className="h-22 w-auto md:h-35"
           />
           <p className="max-w-sm text-sm">
-            Ernährungsberaterin &amp; Coach für Gesundheit, Vitalstoffe und deinen
-            persönlichen Weg zu mehr Energie und Balance.
+            Wachse in deine Kraft, blühe in dein Leben und finde zurück zu dir
+            selbst.
           </p>
           <ul className="flex gap-3">
             {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
@@ -59,27 +59,27 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-          <div className="flex flex-col items-center gap-3">
-            <p className="text-sm">Mitglied von:</p>
+          <div className="flex flex-col items-center gap-1.5">
+            <p className="text-xs">Mitglied von:</p>
             <Image
               src={`/svnm.png?v=${ASSET_V}`}
               alt="SVNM – Schweizerischer Verband Network Marketing"
               width={1536}
               height={550}
-              className="h-24 w-auto md:h-28"
+              className="h-12 w-auto md:h-14"
             />
             <a
               href="https://svnm.online"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm underline underline-offset-4 hover:text-sage"
+              className="text-xs underline underline-offset-4 hover:text-sage"
             >
               svnm.online
             </a>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col-reverse items-center gap-4 border-t border-sage/15 pt-8 text-xs sm:flex-row sm:justify-between">
+        <div className="mt-6 flex flex-col-reverse items-center gap-2 border-t border-sage/15 pt-4 text-[11px] sm:flex-row sm:justify-between">
           <p>© {year} Silke Metzinger. Alle Rechte vorbehalten.</p>
           <ul className="flex gap-6">
             {FOOTER_LINKS.map((link) => (

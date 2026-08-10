@@ -167,10 +167,10 @@ export default function DatenschutzPage() {
 
         <section>
           <h2 className="font-serif text-lg text-text-primary">
-            7. Anmeldung für die „15 Reflexionsfragen“ (Lead-Magnet)
+            7. Anmeldung für die „Reflexionsfragen“ (Lead-Magnet)
           </h2>
           <p className="mt-2">
-            Wenn Sie über das Anmeldeformular die „15 Reflexionsfragen“
+            Wenn Sie über das Anmeldeformular die „Reflexionsfragen“
             anfordern, werden Ihre Angaben (Vorname, Nachname, E-Mail-Adresse)
             zum Zweck der Zusendung dieses Inhalts per E-Mail bei uns
             gespeichert. Die Verarbeitung erfolgt auf Grundlage Ihrer

@@ -12,6 +12,7 @@ import {
 import { isPastEvent, listPosts } from "@/lib/posts";
 import { listSubmissions } from "@/lib/submissions";
 import { getQuestionnaire } from "@/lib/questionnaire";
+import { questionLabel } from "@/lib/questionnaireLabel";
 import { getAdminAccount } from "@/lib/adminAccount";
 import { formatEventDate, formatTimestampShort } from "@/lib/postDate";
 import { POST_TYPE_LABELS, type Post } from "@/types/post";
@@ -123,6 +124,7 @@ export default async function AdminPage() {
   );
   const unreadContact = contactSubmissions.filter((s) => !s.read).length;
   const unreadLeadMagnet = leadMagnetSubmissions.filter((s) => !s.read).length;
+  const questionCount = questionnaire.questions.length;
 
   const mailContent = (
     <>
@@ -189,7 +191,7 @@ export default async function AdminPage() {
         <div className="flex items-center gap-2">
           <Compass className="h-5 w-5 text-sage" strokeWidth={1.75} />
           <h2 className="font-serif text-lg text-text-primary sm:text-xl">
-            Anfragen: 15 Reflexionsfragen
+            Anfragen: {questionCount} {questionLabel(questionCount)}
           </h2>
           {unreadLeadMagnet > 0 && (
             <span className="rounded-full bg-gold/20 px-2 py-0.5 text-xs font-medium text-text-primary">
@@ -243,6 +245,7 @@ export default async function AdminPage() {
                   name={submission.fullName}
                   email={submission.email}
                   sentAt={submission.questionsSentAt}
+                  count={questionCount}
                 />
                 <span className="text-xs text-text-secondary">
                   {submission.questionsSentAt

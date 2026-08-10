@@ -3,25 +3,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Loader2, Send } from "lucide-react";
+import { questionLabel, questionWord } from "@/lib/questionnaireLabel";
 
 export default function SendQuestionsButton({
   id,
   name,
   email,
   sentAt,
+  count,
 }: {
   id: string;
   name: string;
   email: string;
   sentAt: number | null;
+  count: number;
 }) {
   const router = useRouter();
   const [sending, setSending] = useState(false);
 
   async function handleSend() {
     const question = sentAt
-      ? `Die 15 Fragen wurden bereits verschickt. Noch einmal an ${email} senden?`
-      : `Die 15 Reflexionsfragen an ${name} (${email}) senden?`;
+      ? `Die ${count} ${questionWord(count)} wurden bereits verschickt. Noch einmal an ${email} senden?`
+      : `Die ${count} ${questionLabel(count)} an ${name} (${email}) senden?`;
     if (!confirm(question)) return;
 
     setSending(true);
@@ -54,7 +57,7 @@ export default function SendQuestionsButton({
       type="button"
       onClick={handleSend}
       disabled={sending}
-      title={sentAt ? "Fragen erneut senden" : "Die 15 Fragen senden"}
+      title={sentAt ? "Fragen erneut senden" : `Die ${count} ${questionWord(count)} senden`}
       className={`flex min-h-11 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-colors disabled:opacity-50 ${
         sentAt
           ? "bg-white text-text-secondary ring-1 ring-black/10 hover:bg-black/5"

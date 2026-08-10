@@ -9,9 +9,13 @@ type Status = "idle" | "sending" | "success" | "error";
 export default function LeadMagnetModal({
   open,
   onClose,
+  count,
+  label,
 }: {
   open: boolean;
   onClose: () => void;
+  count: number;
+  label: string;
 }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -96,16 +100,16 @@ export default function LeadMagnetModal({
               id="lead-magnet-title"
               className="pr-8 font-serif text-2xl text-text-primary"
             >
-              Hol dir die 15 Reflexionsfragen
+              Hol dir die {count} {label}
             </h2>
             <p className="mt-2 text-sm text-text-secondary">
-              Trag dich ein und du erhältst die 15 Reflexionsfragen kostenlos
-              per E-Mail.
+              Trag dich ein und du erhältst die {count} {label} kostenlos per
+              E-Mail.
             </p>
 
             {status === "success" ? (
               <p className="mt-6 rounded-2xl bg-sage/10 px-4 py-4 text-sm text-sage">
-                Danke für deine Anfrage! Du erhältst die 15 Reflexionsfragen in
+                Danke für deine Anfrage! Du erhältst die {count} {label} in
                 Kürze per E-Mail.
               </p>
             ) : (

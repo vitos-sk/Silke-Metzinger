@@ -249,8 +249,9 @@ export default function Contact() {
                 <p className="font-serif text-xl text-text-primary md:text-2xl">
                   Silke Metzinger
                 </p>
-                <p className="mt-1 text-sm text-text-secondary">
-                  Ernährungsberaterin & Coach
+                <p className="mx-auto mt-1 max-w-xs text-sm text-text-secondary">
+                  Wachse in deine Kraft, blühe in dein Leben und finde zurück zu
+                  dir selbst.
                 </p>
               </div>
             </div>

@@ -16,7 +16,7 @@ export interface LeadMagnetSubmission {
   email: string;
   read: boolean;
   createdAt: number;
-  // Zeitpunkt, an dem die 15 Reflexionsfragen verschickt wurden — null,
+  // Zeitpunkt, an dem die Reflexionsfragen verschickt wurden — null,
   // solange sie noch offen sind.
   questionsSentAt: number | null;
 }
