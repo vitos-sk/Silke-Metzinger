@@ -3,7 +3,7 @@ import { Resend } from "resend";
 import { getAdminAccount, normalizeEmail } from "@/lib/adminAccount";
 import { RESET_LINK_VALID_MINUTES, createResetToken } from "@/lib/passwordReset";
 import { GATE_QUERY_PARAM } from "@/lib/gate";
-import { SITE_URL } from "@/lib/site";
+import { MAIL_FROM, SITE_URL } from "@/lib/site";
 
 const MAX_ATTEMPTS = 3;
 const WINDOW_MS = 15 * 60 * 1000;
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: process.env.CONTACT_EMAIL_FROM ?? "Website <onboarding@resend.dev>",
+      from: process.env.CONTACT_EMAIL_FROM ?? MAIL_FROM,
       to: testRecipient || account.email,
       subject: testRecipient ? `[TEST → ${account.email}] ${subject}` : subject,
       text,

@@ -33,18 +33,23 @@ export function collectImageUrls(post: Post | PostInput): string[] {
 async function deleteUnusedBlobs(urls: string[], exceptPostId: string): Promise<void> {
   if (urls.length === 0) return;
 
-  const posts = await listPosts();
-  const stillUsed = new Set<string>();
-
-  for (const post of posts) {
-    if (post.id === exceptPostId) continue;
-    for (const url of collectImageUrls(post)) stillUsed.add(url);
-  }
-
-  const orphans = [...new Set(urls)].filter((url) => !stillUsed.has(url));
-  if (orphans.length === 0) return;
-
+  // Der gesamte Block ist abgesichert: Auch ein Firestore-Ausfall beim
+  // Nachschlagen der anderen Beitraege darf das bereits gespeicherte bzw.
+  // geloeschte Ergebnis nicht mit einem Fehler ueberschreiben. Im
+  // schlimmsten Fall bleibt eine unbenutzte Datei liegen - die findet
+  // spaeter "npm run blob:orphans".
   try {
+    const posts = await listPosts();
+    const stillUsed = new Set<string>();
+
+    for (const post of posts) {
+      if (post.id === exceptPostId) continue;
+      for (const url of collectImageUrls(post)) stillUsed.add(url);
+    }
+
+    const orphans = [...new Set(urls)].filter((url) => !stillUsed.has(url));
+    if (orphans.length === 0) return;
+
     await del(orphans);
   } catch (error) {
     console.error("Blob-Aufraeumen fehlgeschlagen:", error);

@@ -9,6 +9,14 @@ export const OG_IMAGE_PATH = "/opengraph-image";
 
 export const CONTACT_EMAIL = "info.silke-metzinger@gmx.ch";
 
+// Absender aller Mails. Resend verschickt nur ueber eine dort verifizierte
+// Domain - silke-metzinger.com ist verifiziert, gmx.ch kann es nie sein.
+// Antworten landen trotzdem bei CONTACT_EMAIL, dafuer sorgt Reply-To.
+// Frueher stand hier als Rueckfallwert die Resend-Testadresse
+// onboarding@resend.dev: Damit gingen Mails ausschliesslich an die eigene
+// Adresse durch, Fragebogen-Mails an Interessenten wurden abgelehnt.
+export const MAIL_FROM = "Silke Metzinger <kontakt@silke-metzinger.com>";
+
 // Eine Quelle für Footer, Impressum-Verweise und die strukturierten Daten:
 // Google gleicht Name, Adresse und Telefonnummer über Websites hinweg ab,
 // deshalb dürfen diese Angaben nirgends auseinanderlaufen.

@@ -1,10 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createSubmission } from "@/lib/submissions";
+import { MAIL_FROM } from "@/lib/site";
+import {
+  FIELD_LIMITS,
+  guardPublicForm,
+  isValidEmail,
+  readJsonBody,
+  sanitizeText,
+} from "@/lib/formGuard";
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { fullName, email, consent } = body;
+  const body = await readJsonBody(request);
+
+  if (!body) {
+    return NextResponse.json({ error: "Ungueltige Anfrage." }, { status: 400 });
+  }
+
+  // Bot-Erkennung und Rate-Limit vor jeder Datenbank- oder Mail-Aktion.
+  const guard = await guardPublicForm(request, body);
+  if (!guard.ok) {
+    // Honeypot-Treffer bekommen eine ganz normale Erfolgsantwort.
+    if (guard.status === 200) return NextResponse.json({ success: true });
+    return NextResponse.json({ error: guard.error }, { status: guard.status });
+  }
+
+  const fullName = sanitizeText(body.fullName, FIELD_LIMITS.fullName);
+  const email = sanitizeText(body.email, FIELD_LIMITS.email);
+  const consent = body.consent === true;
 
   if (!fullName || !email || !consent) {
     return NextResponse.json(
@@ -13,7 +36,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return NextResponse.json(
       { error: "Bitte gib eine gültige E-Mail-Adresse ein." },
       { status: 400 },
@@ -41,7 +64,7 @@ export async function POST(request: NextRequest) {
   const resend = new Resend(apiKey);
 
   const { error } = await resend.emails.send({
-    from: process.env.CONTACT_EMAIL_FROM ?? "Website <onboarding@resend.dev>",
+    from: process.env.CONTACT_EMAIL_FROM ?? MAIL_FROM,
     to,
     replyTo: email,
     subject: `Neue Anfrage: Reflexionsfragen – ${fullName}`,

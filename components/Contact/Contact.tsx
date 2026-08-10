@@ -10,6 +10,8 @@ import {
 } from "@/components/icons/BrandIcons";
 import { CopyableNumber } from "@/components/ui/CopyableNumber";
 import { Reveal } from "@/components/motion/Reveal";
+import { HoneypotField } from "@/components/ui/HoneypotField";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import { ASSET_V } from "@/lib/assetVersion";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -109,6 +111,7 @@ export default function Contact() {
           email: formData.get("email"),
           message: formData.get("message"),
           consent: formData.get("consent") === "on",
+          [HONEYPOT_FIELD]: formData.get(HONEYPOT_FIELD),
         }),
       });
 
@@ -167,7 +170,9 @@ export default function Contact() {
               aria-hidden
               className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-sage via-gold to-sage"
             />
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="relative space-y-4">
+              <HoneypotField />
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <FloatingField
                   id="firstName"

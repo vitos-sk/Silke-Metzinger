@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Mail, Send, User, X } from "lucide-react";
+import { HoneypotField } from "@/components/ui/HoneypotField";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -36,6 +38,7 @@ export default function LeadMagnetModal({
           fullName: formData.get("fullName"),
           email: formData.get("email"),
           consent: formData.get("consent") === "on",
+          [HONEYPOT_FIELD]: formData.get(HONEYPOT_FIELD),
         }),
       });
 
@@ -113,7 +116,9 @@ export default function LeadMagnetModal({
                 Kürze per E-Mail.
               </p>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <form onSubmit={handleSubmit} className="relative mt-6 space-y-4">
+                <HoneypotField />
+
                 <div className="group relative">
                   <input
                     id="lead-fullName"

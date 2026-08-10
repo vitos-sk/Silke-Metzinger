@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { getQuestionnaire, renderQuestionnaireEmail } from "@/lib/questionnaire";
 import { getSubmission, markQuestionsSent } from "@/lib/submissions";
+import { MAIL_FROM } from "@/lib/site";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -44,7 +45,7 @@ export async function POST(_request: Request, { params }: RouteParams) {
   const finalSubject = testRecipient ? `[TEST → ${submission.email}] ${subject}` : subject;
 
   const { error } = await resend.emails.send({
-    from: process.env.CONTACT_EMAIL_FROM ?? "Website <onboarding@resend.dev>",
+    from: process.env.CONTACT_EMAIL_FROM ?? MAIL_FROM,
     to: recipient,
     replyTo: process.env.LEAD_MAGNET_EMAIL_TO ?? "info.silke-metzinger@gmx.ch",
     subject: finalSubject,
