@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { deletePost, getPost, isSlugTaken, updatePost } from "@/lib/posts";
 import { parsePostInput } from "@/lib/postContent";
+import { deletePostBlobs, deleteRemovedPostBlobs } from "@/lib/blobCleanup";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -39,6 +40,9 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 
   await updatePost(id, parsed.input);
+  // Ausgetauschte oder entfernte Bilder aus dem Blob Store löschen, damit dort
+  // keine unbenutzten Dateien liegen bleiben.
+  await deleteRemovedPostBlobs(existing, parsed.input);
   revalidatePost(parsed.input.slug, existing.slug);
 
   return NextResponse.json({ ok: true, slug: parsed.input.slug });
@@ -49,6 +53,8 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
   const existing = await getPost(id);
 
   await deletePost(id);
+  // Bilder des gelöschten Beitrags mit entfernen.
+  if (existing) await deletePostBlobs(existing);
 
   revalidatePath("/");
   revalidatePath("/blog");

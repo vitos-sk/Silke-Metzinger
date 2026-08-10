@@ -1,4 +1,4 @@
-export const SITE_URL = "https://silke-metzinger.ch";
+export const SITE_URL = "https://www.silke-metzinger.com";
 
 export const SITE_NAME = "Silke Metzinger";
 

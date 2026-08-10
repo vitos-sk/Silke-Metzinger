@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "blob:orphans": "node --env-file=.env.local scripts/blob-orphans.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
