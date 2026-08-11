@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   const body = await readJsonBody(request);
 
   if (!body) {
-    return NextResponse.json({ error: "Ungueltige Anfrage." }, { status: 400 });
+    return NextResponse.json({ error: "Ungültige Anfrage." }, { status: 400 });
   }
 
   // Bot-Erkennung und Rate-Limit vor jeder Datenbank- oder Mail-Aktion.

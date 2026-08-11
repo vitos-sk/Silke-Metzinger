@@ -120,7 +120,7 @@ export type GuardResult = { ok: true } | { ok: false; status: number; error: str
 const TOO_MANY = {
   ok: false as const,
   status: 429,
-  error: "Zu viele Anfragen. Bitte versuche es spaeter noch einmal.",
+  error: "Zu viele Anfragen. Bitte versuche es später noch einmal.",
 };
 
 // Vollstaendige Pruefung fuer ein oeffentliches Formular.

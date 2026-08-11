@@ -130,6 +130,9 @@ export function renderQuestionnaireEmail(questionnaire: Questionnaire, name: str
 
   const html = `<!doctype html>
 <html lang="de">
+  <head>
+    <meta charset="utf-8" />
+  </head>
   <body style="margin:0;padding:24px;background:#faf8f4;font-family:Georgia,'Times New Roman',serif;">
     <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;padding:32px;">
       <h1 style="margin:0 0 24px;font-size:22px;font-weight:normal;color:#8faf8a;">${escapeHtml(
