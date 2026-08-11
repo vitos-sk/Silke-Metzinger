@@ -130,10 +130,15 @@ Solange kein Konto existiert, wird eines aus `ADMIN_EMAIL`/`ADMIN_PASSWORD` ange
 **Bilder und Aufräumen**
 `/api/admin/upload` prüft Typ (JPG, PNG, WebP, AVIF) und Grösse (max. 8 MB), liest die Bildmasse ohne zusätzliche Abhängigkeit direkt aus dem Datei-Header (`lib/imageSize.ts`) und legt die Datei öffentlich in Vercel Blob ab. Wird ein Titelbild ausgetauscht, ein Bildblock entfernt oder ein Beitrag gelöscht, räumt `lib/blobCleanup.ts` die verwaisten Dateien weg — aber nur, wenn sie in keinem anderen Beitrag mehr vorkommen, und nur im eigenen Blob Store. `npm run blob:orphans` listet übrig gebliebene Dateien auf und löscht sie mit `-- --delete`.
 
-**Schutz der öffentlichen Formulare**
-`lib/formGuard.ts` prüft vor jeder Datenbank- oder Mail-Aktion: ein unsichtbares Honeypot-Feld (Bots bekommen eine ganz normale Erfolgsantwort), 5 Anfragen pro Stunde und Absender sowie 80 pro Stunde für die ganze Seite als Notbremse. Gezählt wird in einer Firestore-Transaktion, die IP dabei nur als Hash. Fällt Firestore aus, gehen Anfragen bewusst durch — ein kaputtes Kontaktformular wäre schlimmer als ein paar ungebremste Anfragen.
+**Rate-Limiting (`lib/rateLimit.ts`)**
+Alle Zähler liegen in Firestore, nicht im Arbeitsspeicher: Auf Vercel laufen mehrere Funktionsinstanzen parallel und werden ständig neu gestartet — ein Zähler im Speicher würde pro Instanz einzeln zählen, aus „5 Versuche“ würden bei zehn Instanzen faktisch 50, und ein Neustart setzte alles zurück. Der Schlüssel (meist die IP) wird nur als Hash gespeichert. Wer gesperrt ist, wird zusätzlich kurz im Speicher der Instanz vermerkt, damit ein laufender Angriff keine Datenbankzugriffe mehr kostet. Fällt Firestore aus, gehen Anfragen bewusst durch — ein blockiertes Kontaktformular oder eine gesperrte Anmeldung wären schlimmer als ein paar ungebremste Anfragen.
 
-> ⚠️ **Bekannte Einschränkung:** Das Rate-Limit von `/api/admin/login` und `/api/admin/forgot-password` liegt in einer `Map` im Arbeitsspeicher der Funktionsinstanz. Auf Vercel laufen mehrere Instanzen parallel und werden regelmässig neu gestartet — jede zählt für sich, wodurch die effektive Zahl erlaubter Versuche mit der Zahl der Instanzen wächst. Für einen belastbaren Schutz müsste der Zähler wie in `lib/formGuard.ts` in Firestore liegen.
+Zwei Betriebsarten:
+- **Kontingent verbrauchen** (`consumeQuota`) — jeder Aufruf zählt. Für die öffentlichen Formulare und für „Passwort vergessen“, weil dort jeder Aufruf eine Mail kostet.
+- **Nur Fehlversuche zählen** (`isRateLimited` + `recordFailure` + `clearFailures`) — für den Login. Eine erfolgreiche Anmeldung löscht den Zähler, sonst würde sich Silke mit fünf ganz normalen Anmeldungen selbst aussperren.
+
+**Schutz der öffentlichen Formulare**
+`lib/formGuard.ts` prüft vor jeder Datenbank- oder Mail-Aktion: ein unsichtbares Honeypot-Feld (Bots bekommen eine ganz normale Erfolgsantwort), 20 Anfragen pro Stunde und Absender sowie 80 pro Stunde für die ganze Seite als Notbremse gegen verteilte Angriffe. Das Limit pro Absender ist bewusst grosszügig: Hinter einer IP können viele Menschen stehen (Mobilfunk, Büro, Hotel-WLAN), und eine verlorene echte Anfrage wiegt schwerer als ein paar zusätzliche Mails. Wer trotzdem anläuft, bekommt in der Fehlermeldung die direkte E-Mail-Adresse genannt.
 
 **Kontakt und Lead-Magnet**
 Beide Formulare speichern die Anfrage in der Collection `submissions` und schicken parallel eine Benachrichtigung per Resend, mit `replyTo` auf die Adresse der Absenderin. Im Admin lassen sich Anfragen als gelesen markieren, löschen und — bei Lead-Magnet-Anfragen — die Reflexionsfragen mit einem Klick versenden. Die Vorlage dafür liegt in `settings/reflexionsfragen`, `{name}` wird beim Versand ersetzt, das Datum der Zustellung landet an der Anfrage.
@@ -207,7 +212,7 @@ GOOGLE_SITE_VERIFICATION=  # Bestätigungscode der Google Search Console
 | `submissions` | Kontakt- und Lead-Magnet-Anfragen (`types/submission.ts`): Name, E-Mail, Nachricht, `read`, `questionsSentAt` |
 | `settings/admin_account` | E-Mail und `scrypt`-Hash des Admin-Passworts |
 | `settings/reflexionsfragen` | Vorlage der Reflexionsfragen (`types/questionnaire.ts`): Betreff, Intro, Fragenliste, Schluss |
-| `rateLimits` | Zählerfenster der öffentlichen Formulare, Schlüssel als Hash |
+| `rateLimits` | Zählerfenster für Formulare, Login und Passwort-Reset, Schlüssel als Hash |
 
 ## ☁️ Deployment
 
@@ -259,6 +264,7 @@ Werden Fotos in `public/` unter gleichem Namen ersetzt, die Zahl in `lib/assetVe
 │   ├── posts.ts, postContent.ts, postDate.ts, postFilter.ts, slug.ts
 │   ├── submissions.ts, questionnaire.ts, questionnaireLabel.ts
 │   ├── adminAccount.ts, session.ts, gate.ts, passwordReset.ts
+│   ├── rateLimit.ts                     # Zähler in Firestore (Formulare + Login)
 │   ├── formGuard.ts, honeypot.ts        # Schutz der öffentlichen Formulare
 │   ├── blobCleanup.ts, imageSize.ts     # Bilder
 │   └── site.ts, structuredData.ts, ogFont.ts, assetVersion.ts
