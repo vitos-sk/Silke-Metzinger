@@ -3,36 +3,15 @@ import { Resend } from "resend";
 import { getAdminAccount, normalizeEmail } from "@/lib/adminAccount";
 import { RESET_LINK_VALID_MINUTES, createResetToken } from "@/lib/passwordReset";
 import { GATE_QUERY_PARAM } from "@/lib/gate";
+import { consumeQuota, getClientIp } from "@/lib/rateLimit";
 import { MAIL_FROM, SITE_URL } from "@/lib/site";
 
 const MAX_ATTEMPTS = 3;
 const WINDOW_MS = 15 * 60 * 1000;
 
-const attempts = new Map<string, { count: number; windowStart: number }>();
-
-function getClientIp(request: Request): string {
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0]?.trim() || "unknown";
-}
-
-function isRateLimited(ip: string): boolean {
-  const entry = attempts.get(ip);
-  if (!entry) return false;
-  if (Date.now() - entry.windowStart > WINDOW_MS) {
-    attempts.delete(ip);
-    return false;
-  }
-  return entry.count >= MAX_ATTEMPTS;
-}
-
-function recordAttempt(ip: string) {
-  const entry = attempts.get(ip);
-  if (!entry || Date.now() - entry.windowStart > WINDOW_MS) {
-    attempts.set(ip, { count: 1, windowStart: Date.now() });
-  } else {
-    entry.count += 1;
-  }
-}
+// Hier zaehlt jeder Aufruf, nicht nur Fehlversuche: Ein Reset-Link kostet
+// eine Mail aus dem Resend-Kontingent, egal ob die Adresse stimmt.
+// Der Zaehler liegt in Firestore und gilt fuer alle Funktionsinstanzen.
 
 function buildResetLink(request: Request, token: string): string {
   // Der Admin-Bereich ist hinter dem Gate versteckt, deshalb muss der
@@ -78,13 +57,14 @@ function renderEmail(link: string) {
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
-  if (isRateLimited(ip)) {
+  const allowed = await consumeQuota(`admin-forgot:${ip}`, MAX_ATTEMPTS, WINDOW_MS);
+
+  if (!allowed) {
     return NextResponse.json(
       { error: "Zu viele Anfragen. Bitte in 15 Minuten erneut versuchen." },
       { status: 429 },
     );
   }
-  recordAttempt(ip);
 
   const body = await request.json().catch(() => null);
   const email = normalizeEmail((body as { email?: unknown } | null)?.email);
