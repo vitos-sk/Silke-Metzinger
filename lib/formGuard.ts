@@ -20,7 +20,12 @@ const HOUR_MS = 60 * 60 * 1000;
 const PER_IP_LIMIT = 20;
 // Fuer die ganze Seite: Notbremse gegen verteilte Angriffe von vielen IPs,
 // damit das Resend-Kontingent (100 Mails/Tag) nicht in Minuten verbrennt.
-const GLOBAL_LIMIT = 80;
+// 25 pro Stunde liegt weit ueber dem echten Aufkommen und bremst einen
+// Angriff frueher aus. Es ist bewusst nur eine Stundenbremse: ein ueber den
+// Tag verteilter Angriff kann das Tageskontingent weiterhin ausschoepfen.
+// Verlorene Anfragen drohen dabei nicht — jede Anfrage steht in Firestore,
+// bevor die Mail rausgeht, und ist im Admin-Bereich sichtbar.
+const GLOBAL_LIMIT = 25;
 
 // Laengengrenzen, damit niemand riesige Texte in Firestore ablegt.
 export const FIELD_LIMITS = {
