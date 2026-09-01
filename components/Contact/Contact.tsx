@@ -12,6 +12,7 @@ import { CopyableNumber } from "@/components/ui/CopyableNumber";
 import { Reveal } from "@/components/motion/Reveal";
 import { HoneypotField } from "@/components/ui/HoneypotField";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
+import { SOCIAL_PROFILES } from "@/lib/site";
 import { ASSET_V } from "@/lib/assetVersion";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -19,17 +20,17 @@ type Status = "idle" | "sending" | "success" | "error";
 const SOCIAL_LINKS = [
   {
     label: "Facebook",
-    href: "https://www.facebook.com/share/19LsGR6kfm/?mibextid=wwXIfr",
+    href: SOCIAL_PROFILES.facebook,
     icon: FacebookIcon,
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
+    href: SOCIAL_PROFILES.instagram,
     icon: InstagramIcon,
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/silke-metzinger",
+    href: SOCIAL_PROFILES.linkedin,
     icon: LinkedInIcon,
   },
 ];
@@ -240,6 +241,24 @@ export default function Contact() {
               {status === "error" && (
                 <p className="text-sm text-red-600">{errorMessage}</p>
               )}
+
+              <aside
+                aria-labelledby="rechtlicher-hinweis"
+                className="rounded-2xl border border-sage/20 bg-white/60 px-4 py-3 text-xs leading-relaxed text-text-secondary"
+              >
+                <p
+                  id="rechtlicher-hinweis"
+                  className="font-medium text-text-primary"
+                >
+                  Rechtlicher Hinweis
+                </p>
+                <p className="mt-1">
+                  Mein ganzheitliches Coaching dient der Selbsterfahrung und
+                  persönlichen Weiterentwicklung. Es handelt sich um keine
+                  medizinische oder therapeutische Behandlung. Es werden keine
+                  Heilversprechen abgegeben.
+                </p>
+              </aside>
             </form>
           </Reveal>
 

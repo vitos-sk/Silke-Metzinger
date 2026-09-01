@@ -47,5 +47,5 @@ export const SOCIAL_PROFILES = {
   facebook: "https://www.facebook.com/share/19LsGR6kfm/?mibextid=wwXIfr",
   instagram:
     "https://www.instagram.com/silke_metzinger_?igsh=bDd1dDF1YWQwY2Fz&utm_source=qr",
-  linkedin: "https://linkedin.com/in/silke-metzinger",
+  linkedin: "https://www.linkedin.com/in/silke-metzinger-8b04a0420",
 } as const;
