@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+# Fremde Projekte (WebFrei-Entwürfe) – nicht Teil dieser Website
+/vitaliy-portfolio/
+/webfrei/
